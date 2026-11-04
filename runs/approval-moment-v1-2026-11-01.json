@@ -1,0 +1,178 @@
+{
+  "run": "approval-moment-v1",
+  "timestamp": "2026-11-01T15:09:21+00:00",
+  "mode": "harness approval demo (local, deterministic, NO API call)",
+  "model_facing_tool_changed": false,
+  "source_run": "agentic-loop-v1-2026-10-31-timing.json",
+  "source_gate_entries_tool_level": 6,
+  "gate_log_basis": "fault-level: the source run's 6 tool-level propose_fix calls group into the 4 faults of expected_findings.json (FAULT-1 and FAULT-2 each had two calls). Fix texts are the model's own proposed changes from the source run's gate log, combined verbatim where a fault had two calls \u2014 NOT the expected_findings answer key",
+  "fix_text_source": "model's own propose_fix change texts, runs/agentic-loop-v1-2026-10-31-timing.json gate_log",
+  "applied_patch_note": "the harness applied a data patch to the copy: invented transaction_id DEMO-TXN-1001 (the logic skips the refund's existing DEMO-TXN-1002) + value string->number. In production the same fix lands in checkout code; the demo patches the data copy to show the revenue effect",
+  "applier_scope": "the applier implements FAULT-1 only \u2014 the demo climax pick. Any other pick is gate-evaluated but stops before applying, so the on-screen choice on recording day is FAULT-1 by design",
+  "revenue_scope": "recorded purchase revenue on the demo copy \u2014 one synthetic purchase",
+  "selection": "FAULT-1",
+  "selection_source": "harness operator default per endgame-work-order-oct31-nov4.md (demo v1 FAULT-1); on recording day (Nov 3) Akash performs this approval on screen himself",
+  "gate_log": [
+    {
+      "event": "initial_proposal",
+      "fault_id": "FAULT-1",
+      "source_gate_refs": [
+        "missing-transaction_id",
+        "wrong-value-type"
+      ],
+      "target_file": "ga4_events.json",
+      "change": "Add transaction_id to purchase event with unique ID; Change purchase value from string to number 49.99",
+      "irreversible": false,
+      "human_approved": false,
+      "verdict": "BLOCKED",
+      "gate_action": "require_approval",
+      "gate_rule": "policy-default",
+      "reason": "policy default: every fix requires human approval",
+      "applied": false,
+      "proposed_change": "Add transaction_id to purchase event with unique ID; Change purchase value from string to number 49.99",
+      "note": "the gate decides; nothing is applied by this tool, ever"
+    },
+    {
+      "event": "initial_proposal",
+      "fault_id": "FAULT-2",
+      "source_gate_refs": [
+        "gtm-secret",
+        "commit-secret"
+      ],
+      "target_file": "git_commit_diff.txt",
+      "change": "Remove hardcoded API key and replace with env variable reference; Revert apiKey to process.env.DEMO_SERVICE_KEY and remove hardcoded key",
+      "irreversible": false,
+      "human_approved": false,
+      "verdict": "BLOCKED",
+      "gate_action": "require_approval",
+      "gate_rule": "policy-default",
+      "reason": "policy default: every fix requires human approval",
+      "applied": false,
+      "proposed_change": "Remove hardcoded API key and replace with env variable reference; Revert apiKey to process.env.DEMO_SERVICE_KEY and remove hardcoded key",
+      "note": "the gate decides; nothing is applied by this tool, ever"
+    },
+    {
+      "event": "initial_proposal",
+      "fault_id": "FAULT-3",
+      "source_gate_refs": [
+        "unsafe-replay"
+      ],
+      "target_file": "tool_trace.jsonl",
+      "change": "Record args_snapshot and remove now() from output, make deterministic",
+      "irreversible": false,
+      "human_approved": false,
+      "verdict": "BLOCKED",
+      "gate_action": "require_approval",
+      "gate_rule": "policy-default",
+      "reason": "policy default: every fix requires human approval",
+      "applied": false,
+      "proposed_change": "Record args_snapshot and remove now() from output, make deterministic",
+      "note": "the gate decides; nothing is applied by this tool, ever"
+    },
+    {
+      "event": "initial_proposal",
+      "fault_id": "FAULT-4",
+      "source_gate_refs": [
+        "pii-exposure"
+      ],
+      "target_file": "tool_trace.jsonl",
+      "change": "Redact email and phone from crm.lookup_customer output before logging",
+      "irreversible": false,
+      "human_approved": false,
+      "verdict": "BLOCKED",
+      "gate_action": "require_approval",
+      "gate_rule": "policy-default",
+      "reason": "policy default: every fix requires human approval",
+      "applied": false,
+      "proposed_change": "Redact email and phone from crm.lookup_customer output before logging",
+      "note": "the gate decides; nothing is applied by this tool, ever"
+    },
+    {
+      "event": "human_approval",
+      "fault_id": "FAULT-1",
+      "source_gate_refs": [
+        "missing-transaction_id",
+        "wrong-value-type"
+      ],
+      "target_file": "ga4_events.json",
+      "change": "Add transaction_id to purchase event with unique ID; Change purchase value from string to number 49.99",
+      "irreversible": false,
+      "human_approved": true,
+      "applied_by": "harness applier, after the gate allowed it \u2014 the gate itself applies nothing (hence applied: false on the gate verdict)",
+      "verdict": "APPROVED",
+      "gate_action": "allow",
+      "gate_rule": "human-approved",
+      "reason": "a human approved this fix",
+      "applied": false,
+      "proposed_change": "Add transaction_id to purchase event with unique ID; Change purchase value from string to number 49.99",
+      "note": "the gate decides; nothing is applied by this tool, ever"
+    }
+  ],
+  "deny_probes": [
+    {
+      "probe": "credential-rotation test string (harness-worded) evaluated with human_approved=True",
+      "verdict": "BLOCKED",
+      "gate_action": "deny",
+      "gate_rule": "deny-agent-credential-rotation",
+      "reason": "credential rotation is done by the human in the provider console, never by the agent",
+      "applied": false
+    },
+    {
+      "probe": "irreversible change (probe sets the irreversible flag itself) evaluated with human_approved=True",
+      "verdict": "BLOCKED",
+      "gate_action": "deny",
+      "gate_rule": "deny-irreversible",
+      "reason": "irreversible changes are never applied on an agent's proposal \u2014 a human performs them by hand",
+      "applied": false
+    }
+  ],
+  "final_gate_tally": {
+    "approved": 1,
+    "blocked": 3,
+    "applied": 1,
+    "applied_where": "dataset copy only"
+  },
+  "applied_changes_on_copy": [
+    "events[4] purchase: added transaction_id DEMO-TXN-1001",
+    "events[4] purchase: value coerced from string to number 49.99"
+  ],
+  "copy_dir": "runs/approval-moment-2026-11-01/demo-dataset-v1-approved-copy",
+  "revenue": {
+    "recorded_before_usd": 0.0,
+    "recorded_after_usd": 49.99,
+    "impact_line_before": "Revenue at risk: $49.99 \u2014 this purchase has no transaction_id and its value is a string, so GA4 drops or mis-attributes the order. It is 1 of 1 purchase events: 100% of the property's recorded order revenue.",
+    "impact_line_after": null,
+    "totals_before": [
+      "revenue at risk $49.99",
+      "1 key exposed in 2 places",
+      "1 of 5 calls unverifiable",
+      "1 customer record exposed"
+    ],
+    "totals_after": [
+      "1 key exposed in 2 places",
+      "1 of 5 calls unverifiable",
+      "1 customer record exposed"
+    ]
+  },
+  "originals_untouched": true,
+  "planted_secret_values_in_copy": [
+    "DEMO_KEY_9f8e7d6c5b4a_fake_do_not_use"
+  ],
+  "estimated_cost_usd": 0.0,
+  "cumulative_hackathon_usd": 1.153438,
+  "acceptance_checks": {
+    "exactly_one_approved": true,
+    "exactly_one_applied_on_copy": true,
+    "all_other_fixes_blocked": true,
+    "originals_untouched": true,
+    "revenue_corrected": true,
+    "fault1_impact_cleared_on_copy": true,
+    "purchase_anomalies_cleared_on_copy": true,
+    "deny_probes_still_deny": true,
+    "planted_secrets_obviously_fake": true,
+    "no_api_spend": true
+  },
+  "acceptance_passed": true,
+  "report": "report/findings-report-agentic-v1-approval-moment.html",
+  "render_note": "wrote /home/hatch/workspace/hackathons/meta-global-2026/report/findings-report-agentic-v1-approval-moment.html (13572 chars, 6 finding cards, score 4/4)"
+}
