@@ -1,0 +1,92 @@
+{
+ "grader": "grade_by_type (secondary; strict phrase grader stays primary)",
+ "pre_registered": "2026-10-29",
+ "run_file": "agentic-loop-v2-holdout-2026-10-28-graderfix.json",
+ "dataset": "demo-dataset-v2-holdout",
+ "typed_score": "5/5",
+ "caught": [
+  "FAULT-V2-1",
+  "FAULT-V2-2",
+  "FAULT-V2-3",
+  "FAULT-V2-4",
+  "FAULT-V2-5"
+ ],
+ "missed": [],
+ "per_fault": [
+  {
+   "id": "FAULT-V2-1",
+   "expected_type": "currency_mismatch",
+   "alias_types": [
+    "currency_mismatch"
+   ],
+   "expected_files": [
+    "ga4_events.json"
+   ],
+   "caught": true,
+   "finding_indices": [
+    0
+   ]
+  },
+  {
+   "id": "FAULT-V2-2",
+   "expected_type": "duplicate_event",
+   "alias_types": [
+    "duplicate_event"
+   ],
+   "expected_files": [
+    "ga4_events.json"
+   ],
+   "caught": true,
+   "finding_indices": [
+    1
+   ]
+  },
+  {
+   "id": "FAULT-V2-3",
+   "expected_type": "obfuscated_secret",
+   "alias_types": [
+    "obfuscated_secret"
+   ],
+   "expected_files": [
+    "gtm_container.json"
+   ],
+   "caught": true,
+   "finding_indices": [
+    2
+   ]
+  },
+  {
+   "id": "FAULT-V2-4",
+   "expected_type": "missing_idempotency_double_charge",
+   "alias_types": [
+    "missing_idempotency"
+   ],
+   "expected_files": [
+    "tool_trace.jsonl"
+   ],
+   "caught": true,
+   "finding_indices": [
+    3
+   ]
+  },
+  {
+   "id": "FAULT-V2-5",
+   "expected_type": "pii_in_tool_input",
+   "alias_types": [
+    "pii_exposure"
+   ],
+   "expected_files": [
+    "tool_trace.jsonl"
+   ],
+   "caught": true,
+   "finding_indices": [
+    4
+   ]
+  }
+ ],
+ "false_alarm_indices": [],
+ "false_alarms": [],
+ "unclassified_other_indices": [],
+ "clean_pass": null,
+ "findings_submitted": 5
+}
