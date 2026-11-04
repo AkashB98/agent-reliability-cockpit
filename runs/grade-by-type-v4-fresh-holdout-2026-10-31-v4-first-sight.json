@@ -1,0 +1,101 @@
+{
+ "grader": "grade_by_type (secondary; strict phrase grader stays primary)",
+ "pre_registered": "2026-10-29",
+ "run_file": "agentic-loop-v4-fresh-holdout-2026-10-31-v4-first-sight.json",
+ "dataset": "demo-dataset-v4-fresh-holdout",
+ "typed_score": "5/5",
+ "caught": [
+  "FAULT-V4-1",
+  "FAULT-V4-2",
+  "FAULT-V4-3",
+  "FAULT-V4-4",
+  "FAULT-V4-5"
+ ],
+ "missed": [],
+ "per_fault": [
+  {
+   "id": "FAULT-V4-1",
+   "expected_type": "currency_mismatch",
+   "alias_types": [
+    "currency_mismatch"
+   ],
+   "expected_files": [
+    "ga4_events.json"
+   ],
+   "caught": true,
+   "finding_indices": [
+    0,
+    1
+   ]
+  },
+  {
+   "id": "FAULT-V4-2",
+   "expected_type": "duplicate_event",
+   "alias_types": [
+    "duplicate_event"
+   ],
+   "expected_files": [
+    "ga4_events.json"
+   ],
+   "caught": true,
+   "finding_indices": [
+    2
+   ]
+  },
+  {
+   "id": "FAULT-V4-3",
+   "expected_type": "obfuscated_secret",
+   "alias_types": [
+    "obfuscated_secret"
+   ],
+   "expected_files": [
+    "gtm_container.json"
+   ],
+   "caught": true,
+   "finding_indices": [
+    3
+   ]
+  },
+  {
+   "id": "FAULT-V4-4",
+   "expected_type": "missing_idempotency_double_charge",
+   "alias_types": [
+    "missing_idempotency"
+   ],
+   "expected_files": [
+    "tool_trace.jsonl"
+   ],
+   "caught": true,
+   "finding_indices": [
+    4
+   ]
+  },
+  {
+   "id": "FAULT-V4-5",
+   "expected_type": "pii_in_tool_input",
+   "alias_types": [
+    "pii_exposure"
+   ],
+   "expected_files": [
+    "tool_trace.jsonl"
+   ],
+   "caught": true,
+   "finding_indices": [
+    6
+   ]
+  }
+ ],
+ "false_alarm_indices": [
+  5
+ ],
+ "false_alarms": [
+  {
+   "file": "tool_trace.jsonl",
+   "fault_type": "unsafe_replay",
+   "issue": "Unsafe replay: payments.charge_card call t-202 settled 2 charges ch_hp_441 and ch_hp_442 on one call"
+  }
+ ],
+ "unclassified_other_indices": [],
+ "clean_pass": null,
+ "findings_submitted": 7
+}
