@@ -1,0 +1,5 @@
+{"call_id": "call_001", "tool": "ga4.audit_events", "args_snapshot": {"property": "G-DEMO000000", "date": "2026-10-21"}, "output": {"events_checked": 6, "issues": 0}, "status": "ok", "replayable": true}
+{"call_id": "call_002", "tool": "gtm.list_tags", "args_snapshot": {"container": "GTM-DEMO000"}, "output": {"tags": 3, "triggers": 2, "variables": 2}, "status": "ok", "replayable": true}
+{"call_id": "call_003", "tool": "report.build_daily_summary", "args_snapshot": {"property": "G-DEMO000000", "date": "2026-10-21", "as_of": "2026-10-21T23:59:59Z"}, "output": {"summary": "Sessions for 2026-10-21 (fixed as_of input recorded in args): 1,284"}, "status": "ok", "replayable": true}
+{"call_id": "call_004", "tool": "crm.lookup_customer", "args_snapshot": {"customer_id": "DEMO-CUST-043"}, "output": {"customer_id": "DEMO-CUST-043", "tier": "gold", "contact_on_file": true, "pii_returned": false}, "status": "ok", "replayable": true}
+{"call_id": "call_005", "tool": "git.scan_secrets", "args_snapshot": {"repo": "demo-repo", "range": "HEAD~1..HEAD"}, "output": {"findings": 0}, "status": "ok", "replayable": true}
