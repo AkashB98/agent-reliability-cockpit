@@ -1,0 +1,640 @@
+{
+  "run": "agentic-loop-v1",
+  "run_suffix": "graderfix",
+  "post_hoc_disclosure": "post-hoc re-run of a previously-seen dataset to verify the fault-taxonomy fix (Claude consult: runs/claude-consult-2026-10-28-grader-fix.md); grader and ground truth unchanged",
+  "timestamp": "2026-10-28T18:13:20+00:00",
+  "model": "muse-spark-1.1",
+  "mode": "agentic tool-calling loop (chat/completions, streamed)",
+  "recipe": {
+    "max_completion_tokens": 12000,
+    "reasoning_effort": "low",
+    "step_cap_tool_calls": 24,
+    "run_budget_usd": 0.25
+  },
+  "status": "findings submitted via render_report",
+  "api_calls": [
+    {
+      "http_status": 200,
+      "usage": {
+        "completion_tokens": 422,
+        "prompt_tokens": 2561,
+        "total_tokens": 2983,
+        "completion_tokens_details": {
+          "reasoning_tokens": 11
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 241
+        }
+      },
+      "reasoning_tokens": 11,
+      "finish_reason": "tool_calls",
+      "estimated_cost_usd": 0.004995,
+      "error": null
+    },
+    {
+      "http_status": 200,
+      "usage": {
+        "completion_tokens": 251,
+        "prompt_tokens": 3851,
+        "total_tokens": 4102,
+        "completion_tokens_details": {
+          "reasoning_tokens": 22
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 2545
+        }
+      },
+      "reasoning_tokens": 22,
+      "finish_reason": "tool_calls",
+      "estimated_cost_usd": 0.00588,
+      "error": null
+    },
+    {
+      "http_status": 200,
+      "usage": {
+        "completion_tokens": 240,
+        "prompt_tokens": 6650,
+        "total_tokens": 6890,
+        "completion_tokens_details": {
+          "reasoning_tokens": 182
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "reasoning_tokens": 182,
+      "finish_reason": "tool_calls",
+      "estimated_cost_usd": 0.009333,
+      "error": null
+    },
+    {
+      "http_status": 200,
+      "usage": {
+        "completion_tokens": 450,
+        "prompt_tokens": 6990,
+        "total_tokens": 7440,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 3825
+        }
+      },
+      "reasoning_tokens": 0,
+      "finish_reason": "tool_calls",
+      "estimated_cost_usd": 0.01065,
+      "error": null
+    },
+    {
+      "http_status": 200,
+      "usage": {
+        "completion_tokens": 837,
+        "prompt_tokens": 7902,
+        "total_tokens": 8739,
+        "completion_tokens_details": {
+          "reasoning_tokens": 378
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 2545
+        }
+      },
+      "reasoning_tokens": 378,
+      "finish_reason": "tool_calls",
+      "estimated_cost_usd": 0.013435,
+      "error": null
+    }
+  ],
+  "usage_successful_call": {
+    "prompt_tokens": 27954,
+    "completion_tokens": 2200,
+    "completion_tokens_details": {
+      "reasoning_tokens": 593
+    }
+  },
+  "totals_all_attempts": {
+    "prompt_tokens": 27954,
+    "completion_tokens": 2200,
+    "reasoning_tokens": 593
+  },
+  "estimated_cost_usd": 0.044292,
+  "cumulative_hackathon_usd": 0.309893,
+  "tool_log": [
+    {
+      "step": 1,
+      "tool": "validate_events",
+      "args": {},
+      "result": {
+        "events_checked": 6,
+        "purchase_events": 1,
+        "anomalies": [
+          {
+            "event_index": 4,
+            "problem": "purchase event is missing required transaction_id"
+          },
+          {
+            "event_index": 4,
+            "problem": "purchase value is a string, not a number"
+          }
+        ]
+      }
+    },
+    {
+      "step": 2,
+      "tool": "scan_secrets",
+      "args": {
+        "file": "ga4_events.json"
+      },
+      "result": {
+        "file": "ga4_events.json",
+        "findings": [],
+        "active_findings": 0,
+        "allowlisted": 0,
+        "suppressed": 0,
+        "scanner_exit_code": 0
+      }
+    },
+    {
+      "step": 3,
+      "tool": "scan_secrets",
+      "args": {
+        "file": "gtm_container.json"
+      },
+      "result": {
+        "file": "gtm_container.json",
+        "findings": [
+          {
+            "detector": "ENT-SECRET",
+            "kind": "entropy_secret",
+            "severity": "high",
+            "line": 56
+          }
+        ],
+        "active_findings": 1,
+        "allowlisted": 0,
+        "suppressed": 0,
+        "scanner_exit_code": 2
+      }
+    },
+    {
+      "step": 4,
+      "tool": "scan_secrets",
+      "args": {
+        "file": "tool_trace.jsonl"
+      },
+      "result": {
+        "file": "tool_trace.jsonl",
+        "findings": [
+          {
+            "detector": "PAT-EMAIL",
+            "kind": "email",
+            "severity": "low",
+            "line": 4
+          },
+          {
+            "detector": "PAT-PHONE",
+            "kind": "phone",
+            "severity": "low",
+            "line": 4
+          }
+        ],
+        "active_findings": 2,
+        "allowlisted": 0,
+        "suppressed": 0,
+        "scanner_exit_code": 1
+      }
+    },
+    {
+      "step": 5,
+      "tool": "scan_secrets",
+      "args": {
+        "file": "git_commit_diff.txt"
+      },
+      "result": {
+        "file": "git_commit_diff.txt",
+        "findings": [
+          {
+            "detector": "PAT-GENERIC-SECRET",
+            "kind": "generic_secret",
+            "severity": "high",
+            "line": 5
+          }
+        ],
+        "active_findings": 1,
+        "allowlisted": 0,
+        "suppressed": 0,
+        "scanner_exit_code": 2
+      }
+    },
+    {
+      "step": 6,
+      "tool": "replay_trace",
+      "args": {},
+      "result": {
+        "calls_checked": 5,
+        "flagged": 1,
+        "calls": [
+          {
+            "call": "call_001",
+            "tool": "ga4.audit_events",
+            "verdict": "replayable",
+            "reasons": []
+          },
+          {
+            "call": "call_002",
+            "tool": "gtm.list_tags",
+            "verdict": "replayable",
+            "reasons": []
+          },
+          {
+            "call": "call_003",
+            "tool": "report.build_daily_summary",
+            "verdict": "UNREPLAYABLE/UNSAFE",
+            "reasons": [
+              "no args snapshot recorded \u2014 the call's inputs are lost",
+              "output embeds a now() wall-clock value",
+              "the trace itself marks this call replayable=false"
+            ]
+          },
+          {
+            "call": "call_004",
+            "tool": "crm.lookup_customer",
+            "verdict": "replayable",
+            "reasons": []
+          },
+          {
+            "call": "call_005",
+            "tool": "git.scan_secrets",
+            "verdict": "replayable",
+            "reasons": []
+          }
+        ]
+      }
+    },
+    {
+      "step": 7,
+      "tool": "scrub_pii",
+      "args": {
+        "file": "tool_trace.jsonl"
+      },
+      "result": {
+        "file": "tool_trace.jsonl",
+        "changed": true,
+        "pii_findings": [
+          {
+            "detector": "PAT-EMAIL",
+            "category": "email",
+            "redaction": "[REDACTED:email]"
+          },
+          {
+            "detector": "PAT-PHONE",
+            "category": "phone",
+            "redaction": "[REDACTED:phone]"
+          }
+        ],
+        "note": "counts and categories only \u2014 raw values never leave the machine; the redacted text is the only version that may be stored or shown"
+      }
+    },
+    {
+      "step": 8,
+      "tool": "scan_injection",
+      "args": {
+        "file": "tool_trace.jsonl"
+      },
+      "result": {
+        "file": "tool_trace.jsonl",
+        "decision": "allow",
+        "findings": [],
+        "findings_total": 0
+      }
+    },
+    {
+      "step": 9,
+      "tool": "read_file",
+      "args": {
+        "file": "ga4_events.json"
+      },
+      "result": {
+        "file": "ga4_events.json",
+        "content_numbered": "   1| {\n   2|  \"events\": [\n   3|   {\n   4|    \"event_name\": \"page_view\",\n   5|    \"event_params\": {\n   6|     \"page_location\": \"/demo/home\",\n   7|     \"page_title\": \"Home\"\n   8|    },\n   9|    \"timestamp\": \"2026-10-20T14:02:11Z\"\n  10|   },\n  11|   {\n  12|    \"event_name\": \"view_item\",\n  13|    \"event_params\": {\n  14|     \"currency\": \"USD\",\n  15|     \"items\": [\n  16|      {\n  17|       \"item_id\": \"DEMO-SKU-001\",\n  18|       \"item_name\": \"Demo Trail Shoes\",\n  19|       \"price\": 49.99\n  20|      }\n  21|     ],\n  22|     \"value\": 49.99\n  23|    },\n  24|    \"timestamp\": \"2026-10-20T14:03:02Z\"\n  25|   },\n  26|   {\n  27|    \"event_name\": \"add_to_cart\",\n  28|    \"event_params\": {\n  29|     \"currency\": \"USD\",\n  30|     \"items\": [\n  31|      {\n  32|       \"item_id\": \"DEMO-SKU-001\",\n  33|       \"item_name\": \"Demo Trail Shoes\",\n  34|       \"price\": 49.99\n  35|      }\n  36|     ],\n  37|     \"value\": 49.99\n  38|    },\n  39|    \"timestamp\": \"2026-10-20T14:03:40Z\"\n  40|   },\n  41|   {\n  42|    \"event_name\": \"begin_checkout\",\n  43|    \"event_params\": {\n  44|     \"currency\": \"USD\",\n  45|     \"items\": [\n  46|      {\n  47|       \"item_id\": \"DEMO-SKU-001\",\n  48|       \"item_name\": \"Demo Trail Shoes\",\n  49|       \"price\": 49.99\n  50|      }\n  51|     ],\n  52|     \"value\": 49.99\n  53|    },\n  54|    \"timestamp\": \"2026-10-20T14:04:15Z\"\n  55|   },\n  56|   {\n  57|    \"event_name\": \"purchase\",\n  58|    \"event_params\": {\n  59|     \"currency\": \"USD\",\n  60|     \"items\": [\n  61|      {\n  62|       \"item_id\": \"DEMO-SKU-001\",\n  63|       \"item_name\": \"Demo Trail Shoes\",\n  64|       \"price\": 49.99\n  65|      }\n  66|     ],\n  67|     \"value\": \"49.99\"\n  68|    },\n  69|    \"timestamp\": \"2026-10-20T14:05:01Z\"\n  70|   },\n  71|   {\n  72|    \"event_name\": \"refund\",\n  73|    \"event_params\": {\n  74|     \"currency\": \"USD\",\n  75|     \"items\": [\n  76|      {\n  77|       \"item_id\": \"DEMO-SKU-007\",\n  78|       \"item_name\": \"Demo Socks\",\n  79|       \"price\": 19.99\n  80|      }\n  81|     ],\n  82|     \"transaction_id\": \"DEMO-TXN-1002\",\n  83|     \"value\": 19.99\n  84|    },\n  85|    \"timestamp\": \"2026-10-20T15:11:44Z\"\n  86|   }\n  87|  ],\n  88|  \"measurement_id\": \"G-DEMO000000\",\n  89|  \"property\": \"Northwind Outfitters (demo) \\u2014 SYNTHETIC\"\n  90| }"
+      }
+    },
+    {
+      "step": 10,
+      "tool": "read_file",
+      "args": {
+        "file": "gtm_container.json"
+      },
+      "result": {
+        "file": "gtm_container.json",
+        "content_numbered": "   1| {\n   2|  \"container\": \"Northwind Outfitters (demo) \\u2014 SYNTHETIC\",\n   3|  \"container_id\": \"GTM-DEMO000\",\n   4|  \"tags\": [\n   5|   {\n   6|    \"fires_on\": \"All Pages\",\n   7|    \"name\": \"GA4 Config\",\n   8|    \"parameters\": {\n   9|     \"measurementId\": \"G-DEMO000000\"\n  10|    },\n  11|    \"tag_id\": 101,\n  12|    \"type\": \"gaawe\"\n  13|   },\n  14|   {\n  15|    \"fires_on\": \"Demo DataLayer Push \\u2014 purchase\",\n  16|    \"name\": \"GA4 Event \\u2014 purchase\",\n  17|    \"parameters\": {\n  18|     \"eventName\": \"purchase\"\n  19|    },\n  20|    \"tag_id\": 102,\n  21|    \"type\": \"gaawe\"\n  22|   },\n  23|   {\n  24|    \"fires_on\": \"All Pages\",\n  25|    \"name\": \"Demo Ads Pixel \\u2014 PageView\",\n  26|    \"parameters\": {\n  27|     \"html\": \"<script>/* demo pixel stub */</script>\"\n  28|    },\n  29|    \"tag_id\": 103,\n  30|    \"type\": \"html\"\n  31|   }\n  32|  ],\n  33|  \"triggers\": [\n  34|   {\n  35|    \"name\": \"All Pages\",\n  36|    \"trigger_id\": 201,\n  37|    \"type\": \"pageview\"\n  38|   },\n  39|   {\n  40|    \"event_name\": \"purchase\",\n  41|    \"name\": \"Demo DataLayer Push \\u2014 purchase\",\n  42|    \"trigger_id\": 202,\n  43|    \"type\": \"custom_event\"\n  44|   }\n  45|  ],\n  46|  \"variables\": [\n  47|   {\n  48|    \"name\": \"Demo API Endpoint\",\n  49|    \"type\": \"constant\",\n  50|    \"value\": \"https://api.example.invalid/v1\",\n  51|    \"variable_id\": 301\n  52|   },\n  53|   {\n  54|    \"name\": \"Demo Service Key\",\n  55|    \"type\": \"constant\",\n  56|    \"value\": \"DEMO_KEY_9f8e7d6c5b4a_fake_do_not_use\",\n  57|    \"variable_id\": 302\n  58|   }\n  59|  ]\n  60| }"
+      }
+    },
+    {
+      "step": 11,
+      "tool": "read_file",
+      "args": {
+        "file": "tool_trace.jsonl"
+      },
+      "result": {
+        "file": "tool_trace.jsonl",
+        "content_numbered": "   1| {\"call_id\": \"call_001\", \"tool\": \"ga4.audit_events\", \"args_snapshot\": {\"property\": \"G-DEMO000000\", \"date\": \"2026-10-20\"}, \"output\": {\"events_checked\": 6, \"issues\": 0}, \"status\": \"ok\", \"replayable\": true}\n   2| {\"call_id\": \"call_002\", \"tool\": \"gtm.list_tags\", \"args_snapshot\": {\"container\": \"GTM-DEMO000\"}, \"output\": {\"tags\": 3, \"triggers\": 2, \"variables\": 2}, \"status\": \"ok\", \"replayable\": true}\n   3| {\"call_id\": \"call_003\", \"tool\": \"report.build_daily_summary\", \"args_snapshot\": null, \"output\": {\"summary\": \"Sessions as of now(): 2026-10-24T09:16:51-05:00 \\u2014 value depends on wall-clock at run time\"}, \"status\": \"ok\", \"replayable\": false}\n   4| {\"call_id\": \"call_004\", \"tool\": \"crm.lookup_customer\", \"args_snapshot\": {\"customer_id\": \"DEMO-CUST-042\"}, \"output\": {\"name\": \"Demo Customer\", \"email\": \"demo.customer@example.invalid\", \"phone\": \"+1-555-010-4242\"}, \"status\": \"ok\", \"replayable\": true}\n   5| {\"call_id\": \"call_005\", \"tool\": \"git.scan_secrets\", \"args_snapshot\": {\"repo\": \"demo-repo\", \"range\": \"HEAD~1..HEAD\"}, \"output\": {\"findings\": 0}, \"status\": \"ok\", \"replayable\": true}"
+      }
+    },
+    {
+      "step": 12,
+      "tool": "read_file",
+      "args": {
+        "file": "git_commit_diff.txt"
+      },
+      "result": {
+        "file": "git_commit_diff.txt",
+        "content_numbered": "   1| commit demo0001fictional \u2014 \"wire up demo service client\" (SYNTHETIC, invented for the demo)\n   2| \n   3| diff --git a/config/demo_client.js b/config/demo_client.js\n   4| --- a/config/demo_client.js\n   5| +++ b/config/demo_client.js\n   6| @@ -1,6 +1,8 @@\n   7|  // Northwind Outfitters (demo) \u2014 fictional config\n   8|  const config = {\n   9|    endpoint: \"https://api.example.invalid/v1\",\n  10| -  apiKey: process.env.DEMO_SERVICE_KEY,\n  11| +  // TODO: move back to env before launch\n  12| +  apiKey: \"DEMO_KEY_9f8e7d6c5b4a_fake_do_not_use\",\n  13| +  debug: true,\n  14|  };\n  15|  module.exports = config;"
+      }
+    },
+    {
+      "step": 13,
+      "tool": "compute_impacts",
+      "args": {},
+      "result": {
+        "totals": [
+          "revenue at risk $49.99",
+          "1 key exposed in 2 places",
+          "1 of 5 calls unverifiable",
+          "1 customer record exposed"
+        ],
+        "impacts_by_fault_ref": {
+          "FAULT-1": "Revenue at risk: $49.99 \u2014 this purchase has no transaction_id and its value is a string, so GA4 drops or mis-attributes the order. It is 1 of 1 purchase events: 100% of the property's recorded order revenue.",
+          "FAULT-2": "Exposure: 1 API key in 2 places \u2014 the git commit history and a GTM container variable. Anyone with repo or container access holds the key; rotation is the only fix.",
+          "FAULT-3": "Verification gap: 1 of 5 traced calls (20%) can never be re-run, so what this call reported can never be checked after the fact.",
+          "FAULT-4": "Exposure: 1 customer record in a plain-text log \u2014 2 identifiers (email, phone) stored unredacted, readable by anyone with trace access."
+        },
+        "note": "every figure computed from the dataset files by code \u2014 attach these to the findings you identified; invent none"
+      }
+    },
+    {
+      "step": 14,
+      "tool": "propose_fix",
+      "args": {
+        "change": "Add transaction_id and coerce purchase value to number in GA4 event",
+        "fault_ref": "FAULT-1",
+        "target_file": "ga4_events.json",
+        "irreversible": false
+      },
+      "result": {
+        "verdict": "BLOCKED",
+        "gate_action": "require_approval",
+        "gate_rule": "policy-default",
+        "reason": "policy default: every fix requires human approval",
+        "applied": false,
+        "proposed_change": "Add transaction_id and coerce purchase value to number in GA4 event",
+        "note": "the gate decides; nothing is applied by this tool, ever"
+      }
+    },
+    {
+      "step": 15,
+      "tool": "propose_fix",
+      "args": {
+        "change": "Remove hardcoded API key from GTM variable and git commit, use env var",
+        "fault_ref": "FAULT-2",
+        "target_file": "gtm_container.json",
+        "irreversible": false
+      },
+      "result": {
+        "verdict": "BLOCKED",
+        "gate_action": "require_approval",
+        "gate_rule": "policy-default",
+        "reason": "policy default: every fix requires human approval",
+        "applied": false,
+        "proposed_change": "Remove hardcoded API key from GTM variable and git commit, use env var",
+        "note": "the gate decides; nothing is applied by this tool, ever"
+      }
+    },
+    {
+      "step": 16,
+      "tool": "propose_fix",
+      "args": {
+        "change": "Record args snapshot and remove wall-clock now() from report output to make deterministic",
+        "fault_ref": "FAULT-3",
+        "target_file": "tool_trace.jsonl",
+        "irreversible": false
+      },
+      "result": {
+        "verdict": "BLOCKED",
+        "gate_action": "require_approval",
+        "gate_rule": "policy-default",
+        "reason": "policy default: every fix requires human approval",
+        "applied": false,
+        "proposed_change": "Record args snapshot and remove wall-clock now() from report output to make deterministic",
+        "note": "the gate decides; nothing is applied by this tool, ever"
+      }
+    },
+    {
+      "step": 17,
+      "tool": "propose_fix",
+      "args": {
+        "change": "Redact email and phone from crm.lookup_customer output in trace logs",
+        "fault_ref": "FAULT-4",
+        "target_file": "tool_trace.jsonl",
+        "irreversible": false
+      },
+      "result": {
+        "verdict": "BLOCKED",
+        "gate_action": "require_approval",
+        "gate_rule": "policy-default",
+        "reason": "policy default: every fix requires human approval",
+        "applied": false,
+        "proposed_change": "Redact email and phone from crm.lookup_customer output in trace logs",
+        "note": "the gate decides; nothing is applied by this tool, ever"
+      }
+    },
+    {
+      "step": 18,
+      "tool": "render_report",
+      "args": {
+        "findings": [
+          {
+            "file": "ga4_events.json",
+            "line": 57,
+            "severity": "high",
+            "fault_type": "missing_required_field",
+            "issue": "purchase event at index 4 is missing required transaction_id",
+            "fix": "Add transaction_id to purchase event_params"
+          },
+          {
+            "file": "ga4_events.json",
+            "line": 67,
+            "severity": "medium",
+            "fault_type": "wrong_value_type",
+            "issue": "purchase event value is string \"49.99\" not number 49.99",
+            "fix": "Coerce purchase value to numeric type"
+          },
+          {
+            "file": "gtm_container.json",
+            "line": 56,
+            "severity": "high",
+            "fault_type": "exposed_secret",
+            "issue": "GTM variable Demo Service Key contains hardcoded API key DEMO_KEY_...",
+            "fix": "Remove hardcoded key, use environment variable reference"
+          },
+          {
+            "file": "git_commit_diff.txt",
+            "line": 12,
+            "severity": "high",
+            "fault_type": "exposed_secret",
+            "issue": "Commit diff hardcodes apiKey DEMO_KEY_... in config/demo_client.js",
+            "fix": "Revert to process.env.DEMO_SERVICE_KEY and rotate exposed key"
+          },
+          {
+            "file": "tool_trace.jsonl",
+            "line": 3,
+            "severity": "medium",
+            "fault_type": "unsafe_replay",
+            "issue": "report.build_daily_summary call_003 has null args_snapshot and now() in output and replayable false",
+            "fix": "Record args snapshot and make output deterministic without wall-clock"
+          },
+          {
+            "file": "tool_trace.jsonl",
+            "line": 4,
+            "severity": "high",
+            "fault_type": "pii_exposure",
+            "issue": "crm.lookup_customer output exposes email and phone for DEMO-CUST-042",
+            "fix": "Redact email and phone from trace output"
+          }
+        ]
+      },
+      "result": {
+        "submitted": 6,
+        "note": "findings submitted \u2014 the harness now grades them and renders the report. The audit is complete."
+      }
+    }
+  ],
+  "gate_log": [
+    {
+      "fault_ref": "FAULT-1",
+      "target_file": "ga4_events.json",
+      "change": "Add transaction_id and coerce purchase value to number in GA4 event",
+      "irreversible": false,
+      "verdict": "BLOCKED",
+      "gate_action": "require_approval",
+      "gate_rule": "policy-default",
+      "reason": "policy default: every fix requires human approval",
+      "applied": false,
+      "proposed_change": "Add transaction_id and coerce purchase value to number in GA4 event",
+      "note": "the gate decides; nothing is applied by this tool, ever"
+    },
+    {
+      "fault_ref": "FAULT-2",
+      "target_file": "gtm_container.json",
+      "change": "Remove hardcoded API key from GTM variable and git commit, use env var",
+      "irreversible": false,
+      "verdict": "BLOCKED",
+      "gate_action": "require_approval",
+      "gate_rule": "policy-default",
+      "reason": "policy default: every fix requires human approval",
+      "applied": false,
+      "proposed_change": "Remove hardcoded API key from GTM variable and git commit, use env var",
+      "note": "the gate decides; nothing is applied by this tool, ever"
+    },
+    {
+      "fault_ref": "FAULT-3",
+      "target_file": "tool_trace.jsonl",
+      "change": "Record args snapshot and remove wall-clock now() from report output to make deterministic",
+      "irreversible": false,
+      "verdict": "BLOCKED",
+      "gate_action": "require_approval",
+      "gate_rule": "policy-default",
+      "reason": "policy default: every fix requires human approval",
+      "applied": false,
+      "proposed_change": "Record args snapshot and remove wall-clock now() from report output to make deterministic",
+      "note": "the gate decides; nothing is applied by this tool, ever"
+    },
+    {
+      "fault_ref": "FAULT-4",
+      "target_file": "tool_trace.jsonl",
+      "change": "Redact email and phone from crm.lookup_customer output in trace logs",
+      "irreversible": false,
+      "verdict": "BLOCKED",
+      "gate_action": "require_approval",
+      "gate_rule": "policy-default",
+      "reason": "policy default: every fix requires human approval",
+      "applied": false,
+      "proposed_change": "Redact email and phone from crm.lookup_customer output in trace logs",
+      "note": "the gate decides; nothing is applied by this tool, ever"
+    }
+  ],
+  "model_findings": [
+    {
+      "file": "ga4_events.json",
+      "line": 57,
+      "severity": "high",
+      "fault_type": "missing_required_field",
+      "fault_title": "Missing required field",
+      "issue": "Missing required field: purchase event at index 4 is missing required transaction_id",
+      "fix": "Add transaction_id to purchase event_params"
+    },
+    {
+      "file": "ga4_events.json",
+      "line": 67,
+      "severity": "medium",
+      "fault_type": "wrong_value_type",
+      "fault_title": "Wrong value type",
+      "issue": "Wrong value type: purchase event value is string \"49.99\" not number 49.99",
+      "fix": "Coerce purchase value to numeric type"
+    },
+    {
+      "file": "gtm_container.json",
+      "line": 56,
+      "severity": "high",
+      "fault_type": "exposed_secret",
+      "fault_title": "Exposed secret",
+      "issue": "Exposed secret: GTM variable Demo Service Key contains hardcoded API key DEMO_KEY_...",
+      "fix": "Remove hardcoded key, use environment variable reference"
+    },
+    {
+      "file": "git_commit_diff.txt",
+      "line": 12,
+      "severity": "high",
+      "fault_type": "exposed_secret",
+      "fault_title": "Exposed secret",
+      "issue": "Exposed secret: Commit diff hardcodes apiKey DEMO_KEY_... in config/demo_client.js",
+      "fix": "Revert to process.env.DEMO_SERVICE_KEY and rotate exposed key"
+    },
+    {
+      "file": "tool_trace.jsonl",
+      "line": 3,
+      "severity": "medium",
+      "fault_type": "unsafe_replay",
+      "fault_title": "Unsafe replay",
+      "issue": "Unsafe replay: report.build_daily_summary call_003 has null args_snapshot and now() in output and replayable false",
+      "fix": "Record args snapshot and make output deterministic without wall-clock"
+    },
+    {
+      "file": "tool_trace.jsonl",
+      "line": 4,
+      "severity": "high",
+      "fault_type": "pii_exposure",
+      "fault_title": "PII exposure",
+      "issue": "PII exposure: crm.lookup_customer output exposes email and phone for DEMO-CUST-042",
+      "fix": "Redact email and phone from trace output"
+    }
+  ],
+  "mapping": {
+    "0": "FAULT-1",
+    "2": "FAULT-2",
+    "4": "FAULT-3",
+    "5": "FAULT-4"
+  },
+  "score": {
+    "caught": [
+      "FAULT-1",
+      "FAULT-2",
+      "FAULT-3",
+      "FAULT-4"
+    ],
+    "missed": [],
+    "model_audit": "4/4",
+    "spec_target": "4/4",
+    "gate_blocked": 4,
+    "gate_approved": 0
+  }
+}
