@@ -1,0 +1,74 @@
+{
+  "run": "model-judge-holdout-v2",
+  "timestamp": "2026-10-27T18:12:26+00:00",
+  "model": "muse-spark-1.1",
+  "role": "judge (calibration check)",
+  "graded_run": "holdout-v2",
+  "dataset": "demo-dataset-v2-holdout",
+  "recipe": {
+    "max_completion_tokens_first": 12000,
+    "reasoning_effort": "low",
+    "developer_role_format_rules": true,
+    "response_format": "json_schema object root {verdicts:[...], extras:[...]}"
+  },
+  "attempts": [
+    {
+      "cap": 12000,
+      "strict": true,
+      "http_status": 200,
+      "usage": {
+        "completion_tokens": 879,
+        "prompt_tokens": 981,
+        "total_tokens": 1860,
+        "completion_tokens_details": {
+          "reasoning_tokens": 672
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "reasoning_tokens": 672,
+      "finish_reason": "stop",
+      "content_returned": true,
+      "estimated_cost_usd": 0.004962,
+      "error": null
+    }
+  ],
+  "totals_all_attempts": {
+    "prompt_tokens": 981,
+    "completion_tokens": 879,
+    "reasoning_tokens": 672
+  },
+  "estimated_cost_usd": 0.004962,
+  "verdicts": [
+    {
+      "fault_id": "FAULT-V2-1",
+      "reason": "Finding 0 identifies EUR funnel vs USD purchase mismatch for same items.",
+      "verdict": "caught"
+    },
+    {
+      "fault_id": "FAULT-V2-2",
+      "reason": "Finding 1 notes duplicate purchase for transaction FF-2026-88412.",
+      "verdict": "caught"
+    },
+    {
+      "fault_id": "FAULT-V2-3",
+      "reason": "Finding 2 reports base64-encoded ff_api_token in custom HTML tag.",
+      "verdict": "caught"
+    },
+    {
+      "fault_id": "FAULT-V2-4",
+      "reason": "Finding 3 reports null idempotency_key retry causing double charge.",
+      "verdict": "caught"
+    },
+    {
+      "fault_id": "FAULT-V2-5",
+      "reason": "Findings 4 and 5 report PII and card ending in shipping.create_label input.",
+      "verdict": "caught"
+    }
+  ],
+  "extras": [],
+  "judge_score": "5/5",
+  "deterministic_score": "5/5",
+  "agreement": true
+}
