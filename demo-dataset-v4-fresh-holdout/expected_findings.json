@@ -1,0 +1,93 @@
+{
+  "dataset": "demo-dataset-v4-fresh-holdout",
+  "synthetic": true,
+  "frozen": "2026-10-28",
+  "note": "SEALED fresh holdout built 2026-10-28 AFTER the fault_type taxonomy was frozen and after v2 was disclosed as post-hoc. New fictional company, new values, new hiding places for two faults. Never shown to the model, never used for tuning, expected_findings.json is never included in the model prompt. First run on this set is a first-sight measurement.",
+  "pass_bar": "Model catches >=4 of 5 faults on data it has never seen, in the Oct 31 credibility runs. Report strict + typed scores side by side, same as v2.",
+  "findings": [
+    {
+      "id": "FAULT-V4-1",
+      "type": "currency_mismatch",
+      "severity": "high",
+      "location": "ga4_events.json \u2014 purchase events (transaction HP-2026-7319)",
+      "description": "The purchase events report currency 'GBP' with value 144.00, but the whole funnel ran in USD \u2014 every earlier event uses currency USD and the items were priced at USD 48.00 x 3. Revenue for this order is recorded in the wrong currency.",
+      "evidence": [
+        "currency",
+        "gbp",
+        "usd",
+        "mismatch",
+        "wrong currency",
+        "conversion"
+      ],
+      "expected_fix": "Send the currency the customer actually paid in (USD) on the purchase event; add a schema check that event currency matches item prices/storefront currency."
+    },
+    {
+      "id": "FAULT-V4-2",
+      "type": "duplicate_event",
+      "severity": "high",
+      "location": "ga4_events.json \u2014 purchase events at 15:11:20Z and 15:11:24Z",
+      "description": "The identical purchase event \u2014 same transaction_id HP-2026-7319, same items, same value \u2014 is recorded twice, 4 seconds apart. A double-fired tag records one order as two purchases and doubles reported revenue.",
+      "evidence": [
+        "duplicate",
+        "twice",
+        "double",
+        "same transaction",
+        "fired twice",
+        "two purchase"
+      ],
+      "expected_fix": "De-duplicate on transaction_id at the tag/trigger level and in the reporting pipeline."
+    },
+    {
+      "id": "FAULT-V4-3",
+      "type": "obfuscated_secret",
+      "severity": "critical",
+      "location": "gtm_container.json \u2014 tag 23 'Shipping Rates \u2014 Lookup (custom HTML)'",
+      "description": "A live shipping-rates API key is hidden inside the Shipping Rates custom HTML tag: a base64 blob decoded with atob() at runtime holds {hp_rates_key: HP_TOKEN_f4k3...}. Encoding is not protection \u2014 anyone who can view the container can decode it, and the key ships to every visitor's browser.",
+      "evidence": [
+        "base64",
+        "atob",
+        "encoded",
+        "decode",
+        "obfuscat",
+        "token",
+        "credential",
+        "key",
+        "hidden"
+      ],
+      "expected_fix": "Revoke/rotate the key, move the rates lookup server-side, and never ship credentials \u2014 encoded or not \u2014 in a client-side tag."
+    },
+    {
+      "id": "FAULT-V4-4",
+      "type": "missing_idempotency_double_charge",
+      "severity": "critical",
+      "location": "tool_trace.jsonl \u2014 t-202 payments.charge_card",
+      "description": "payments.charge_card ran with idempotency_key null. When the first attempt timed out at the gateway, the client retried and the customer was charged twice: two settled charges (ch_hp_441, ch_hp_442) of 14400 cents each for one order \u2014 a real double charge.",
+      "evidence": [
+        "idempotency",
+        "twice",
+        "two charges",
+        "double charge",
+        "retry",
+        "duplicate charge",
+        "charged twice"
+      ],
+      "expected_fix": "Require a stable idempotency key (the order reference) on every charge call so gateway retries collapse into one charge; refund the duplicate charge."
+    },
+    {
+      "id": "FAULT-V4-5",
+      "type": "pii_in_tool_input",
+      "severity": "high",
+      "location": "tool_trace.jsonl \u2014 t-203 notifications.send_receipt input",
+      "description": "A customer's email address and phone number sit in the INPUT of the notifications.send_receipt call, so they are stored in the trace log in plain text. Inputs get logged just like outputs \u2014 this trace now holds personal contact data.",
+      "evidence": [
+        "email",
+        "phone",
+        "pii",
+        "personal",
+        "input",
+        "contact"
+      ],
+      "expected_fix": "Pass an order/customer reference instead of raw email/phone, and redact PII from tool inputs before the trace is persisted."
+    }
+  ]
+}
