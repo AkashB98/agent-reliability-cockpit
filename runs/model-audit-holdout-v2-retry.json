@@ -1,0 +1,115 @@
+{
+  "run": "holdout-v2",
+  "timestamp": "2026-10-27T14:53:24+00:00",
+  "model": "muse-spark-1.1",
+  "recipe": {
+    "max_completion_tokens_first": 12000,
+    "reasoning_effort": "low",
+    "developer_role_format_rules": true,
+    "response_format": "json_schema object root {findings:[...]}"
+  },
+  "attempts": [
+    {
+      "cap": 12000,
+      "strict": true,
+      "http_status": 200,
+      "usage": {
+        "completion_tokens": 1049,
+        "prompt_tokens": 2281,
+        "total_tokens": 3330,
+        "completion_tokens_details": {
+          "reasoning_tokens": 704
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "reasoning_tokens": 704,
+      "finish_reason": "stop",
+      "content_returned": true,
+      "estimated_cost_usd": 0.00731,
+      "error": null
+    }
+  ],
+  "usage_successful_call": {
+    "completion_tokens": 1049,
+    "prompt_tokens": 2281,
+    "total_tokens": 3330,
+    "completion_tokens_details": {
+      "reasoning_tokens": 704
+    },
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "totals_all_attempts": {
+    "prompt_tokens": 2281,
+    "completion_tokens": 1049,
+    "reasoning_tokens": 704
+  },
+  "estimated_cost_usd": 0.00731,
+  "reasoning_effort_verdict": "reasoning_effort=low: reasoning_tokens on the successful call = 704 (baselines without the control: 232 on a trivial prompt, 2,498 on the first audit attempt). The control WORKED \u2014 reasoning stayed a small share and the answer was emitted.",
+  "model_findings": [
+    {
+      "file": "ga4_events.json",
+      "fix": "Use single consistent currency across funnel, reprocess purchase in EUR.",
+      "issue": "Currency mismatch: funnel EUR but purchase USD for same items.",
+      "line": 1,
+      "severity": "high"
+    },
+    {
+      "file": "ga4_events.json",
+      "fix": "Deduplicate purchase by transaction_id before sending to GA4.",
+      "issue": "Duplicate purchase event for transaction_id FF-2026-88412.",
+      "line": 1,
+      "severity": "high"
+    },
+    {
+      "file": "gtm_container.json",
+      "fix": "Remove embedded token, fetch from server, rotate exposed token.",
+      "issue": "Leaked secret: base64-encoded ff_api_token embedded in custom HTML tag.",
+      "line": 1,
+      "severity": "high"
+    },
+    {
+      "file": "tool_trace.jsonl",
+      "fix": "Require idempotency_key and prevent retries without deduplication.",
+      "issue": "payments.charge_card retried with null idempotency_key causing double charge.",
+      "line": 2,
+      "severity": "high"
+    },
+    {
+      "file": "tool_trace.jsonl",
+      "fix": "Redact PII from tool trace and avoid logging raw addresses.",
+      "issue": "PII exposed in shipping.create_label input: name and full address.",
+      "line": 3,
+      "severity": "high"
+    },
+    {
+      "file": "tool_trace.jsonl",
+      "fix": "Remove card details from logs and mask payment info.",
+      "issue": "Payment data exposed in tool input billing_note with card ending.",
+      "line": 3,
+      "severity": "medium"
+    }
+  ],
+  "mapping": {
+    "0": "FAULT-V2-1",
+    "1": "FAULT-V2-2",
+    "2": "FAULT-V2-3",
+    "3": "FAULT-V2-4",
+    "4": "FAULT-V2-5"
+  },
+  "score": {
+    "caught": [
+      "FAULT-V2-1",
+      "FAULT-V2-2",
+      "FAULT-V2-3",
+      "FAULT-V2-4",
+      "FAULT-V2-5"
+    ],
+    "missed": [],
+    "model_audit": "5/5",
+    "local_pipeline": "not run \u2014 cockpit_day1.py checks are v1-specific"
+  }
+}
