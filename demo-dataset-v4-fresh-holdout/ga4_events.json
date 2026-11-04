@@ -1,0 +1,123 @@
+{
+  "measurement_id": "G-HPINE00000",
+  "stream": "Harbor & Pine Outdoors \u2014 web (SYNTHETIC)",
+  "client": "web \u00b7 gtag.js",
+  "events": [
+    {
+      "name": "session_start",
+      "ts": "2026-10-24T15:02:11Z",
+      "params": {
+        "engagement_time_msec": 100
+      }
+    },
+    {
+      "name": "page_view",
+      "ts": "2026-10-24T15:02:14Z",
+      "params": {
+        "page_location": "https://shop.example.invalid/collections/trail-packs",
+        "page_title": "Trail Packs"
+      }
+    },
+    {
+      "name": "view_item",
+      "ts": "2026-10-24T15:04:39Z",
+      "params": {
+        "currency": "USD",
+        "value": 144.0,
+        "items": [
+          {
+            "item_id": "HP-PACK-310",
+            "item_name": "Ridgeline Pack 40L",
+            "price": 48.0,
+            "quantity": 3
+          }
+        ]
+      }
+    },
+    {
+      "name": "add_to_cart",
+      "ts": "2026-10-24T15:06:02Z",
+      "params": {
+        "currency": "USD",
+        "value": 144.0,
+        "items": [
+          {
+            "item_id": "HP-PACK-310",
+            "item_name": "Ridgeline Pack 40L",
+            "price": 48.0,
+            "quantity": 3
+          }
+        ]
+      }
+    },
+    {
+      "name": "begin_checkout",
+      "ts": "2026-10-24T15:09:48Z",
+      "params": {
+        "currency": "USD",
+        "value": 144.0,
+        "items": [
+          {
+            "item_id": "HP-PACK-310",
+            "item_name": "Ridgeline Pack 40L",
+            "price": 48.0,
+            "quantity": 3
+          }
+        ]
+      }
+    },
+    {
+      "name": "purchase",
+      "ts": "2026-10-24T15:11:20Z",
+      "params": {
+        "currency": "GBP",
+        "value": 144.0,
+        "tax": 0,
+        "transaction_id": "HP-2026-7319",
+        "items": [
+          {
+            "item_id": "HP-PACK-310",
+            "item_name": "Ridgeline Pack 40L",
+            "price": 48.0,
+            "quantity": 3
+          }
+        ]
+      }
+    },
+    {
+      "name": "purchase",
+      "ts": "2026-10-24T15:11:24Z",
+      "params": {
+        "currency": "GBP",
+        "value": 144.0,
+        "tax": 0,
+        "transaction_id": "HP-2026-7319",
+        "items": [
+          {
+            "item_id": "HP-PACK-310",
+            "item_name": "Ridgeline Pack 40L",
+            "price": 48.0,
+            "quantity": 3
+          }
+        ]
+      }
+    },
+    {
+      "name": "refund",
+      "ts": "2026-10-25T08:14:03Z",
+      "params": {
+        "currency": "USD",
+        "value": 32.0,
+        "transaction_id": "HP-2026-7302",
+        "items": [
+          {
+            "item_id": "HP-MUG-021",
+            "item_name": "Enamel Camp Mug",
+            "price": 32.0,
+            "quantity": 1
+          }
+        ]
+      }
+    }
+  ]
+}
