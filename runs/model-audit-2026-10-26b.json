@@ -1,0 +1,113 @@
+{
+  "run": "meta-audit-2",
+  "timestamp": "2026-10-26T20:59:18+00:00",
+  "model": "muse-spark-1.1",
+  "recipe": {
+    "max_completion_tokens_first": 12000,
+    "reasoning_effort": "low",
+    "developer_role_format_rules": true,
+    "response_format": "json_schema object root {findings:[...]}"
+  },
+  "attempts": [
+    {
+      "cap": 12000,
+      "strict": true,
+      "http_status": 200,
+      "usage": {
+        "completion_tokens": 858,
+        "prompt_tokens": 1690,
+        "total_tokens": 2548,
+        "completion_tokens_details": {
+          "reasoning_tokens": 532
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "reasoning_tokens": 532,
+      "finish_reason": "stop",
+      "content_returned": true,
+      "estimated_cost_usd": 0.005759,
+      "error": null
+    }
+  ],
+  "usage_successful_call": {
+    "completion_tokens": 858,
+    "prompt_tokens": 1690,
+    "total_tokens": 2548,
+    "completion_tokens_details": {
+      "reasoning_tokens": 532
+    },
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "totals_all_attempts": {
+    "prompt_tokens": 1690,
+    "completion_tokens": 858,
+    "reasoning_tokens": 532
+  },
+  "estimated_cost_usd": 0.005759,
+  "reasoning_effort_verdict": "reasoning_effort=low: reasoning_tokens on the successful call = 532 (baselines without the control: 232 on a trivial prompt, 2,498 on the first audit attempt). The control WORKED \u2014 reasoning stayed a small share and the answer was emitted.",
+  "model_findings": [
+    {
+      "file": "ga4_events.json",
+      "fix": "Add transaction_id to purchase event_params.",
+      "issue": "purchase event missing required transaction_id field.",
+      "line": 1,
+      "severity": "high"
+    },
+    {
+      "file": "ga4_events.json",
+      "fix": "Send value as number e.g. 49.99 not string.",
+      "issue": "purchase value sent as string instead of number type.",
+      "line": 1,
+      "severity": "medium"
+    },
+    {
+      "file": "gtm_container.json",
+      "fix": "Delete constant variable and load key from env or secrets store.",
+      "issue": "Hard-coded API key in GTM variable Demo Service Key.",
+      "line": 1,
+      "severity": "high"
+    },
+    {
+      "file": "git_commit_diff.txt",
+      "fix": "Restore process.env.DEMO_SERVICE_KEY usage and rotate exposed key.",
+      "issue": "Hard-coded fake API key committed to source config.",
+      "line": 12,
+      "severity": "high"
+    },
+    {
+      "file": "tool_trace.jsonl",
+      "fix": "Store args_snapshot and make output deterministic without now().",
+      "issue": "Tool call not replayable: null args and wall-clock now() in output.",
+      "line": 3,
+      "severity": "medium"
+    },
+    {
+      "file": "tool_trace.jsonl",
+      "fix": "Redact email and phone before persisting or displaying trace.",
+      "issue": "PII email and phone exposed in plain text tool output.",
+      "line": 4,
+      "severity": "high"
+    }
+  ],
+  "mapping": {
+    "0": "FAULT-1",
+    "2": "FAULT-2",
+    "4": "FAULT-3",
+    "5": "FAULT-4"
+  },
+  "score": {
+    "caught": [
+      "FAULT-1",
+      "FAULT-2",
+      "FAULT-3",
+      "FAULT-4"
+    ],
+    "missed": [],
+    "model_audit": "4/4",
+    "local_pipeline": "4/4"
+  }
+}
