@@ -1,0 +1,776 @@
+{
+  "run": "agentic-loop-v4-fresh-holdout",
+  "run_suffix": "v4-first-sight",
+  "post_hoc_disclosure": null,
+  "timestamp": "2026-10-31T13:59:07+00:00",
+  "model": "muse-spark-1.1",
+  "mode": "agentic tool-calling loop (chat/completions, streamed)",
+  "recipe": {
+    "max_completion_tokens": 12000,
+    "reasoning_effort": "low",
+    "step_cap_tool_calls": 24,
+    "run_budget_usd": 0.25
+  },
+  "status": "findings submitted via render_report",
+  "api_calls": [
+    {
+      "http_status": 200,
+      "usage": {
+        "completion_tokens": 325,
+        "prompt_tokens": 2561,
+        "total_tokens": 2886,
+        "completion_tokens_details": {
+          "reasoning_tokens": 62
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "reasoning_tokens": 62,
+      "finish_reason": "tool_calls",
+      "estimated_cost_usd": 0.004582,
+      "error": null
+    },
+    {
+      "http_status": 200,
+      "usage": {
+        "completion_tokens": 343,
+        "prompt_tokens": 3483,
+        "total_tokens": 3826,
+        "completion_tokens_details": {
+          "reasoning_tokens": 44
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "reasoning_tokens": 44,
+      "finish_reason": "tool_calls",
+      "estimated_cost_usd": 0.005811,
+      "error": null
+    },
+    {
+      "http_status": 200,
+      "usage": {
+        "completion_tokens": 197,
+        "prompt_tokens": 5567,
+        "total_tokens": 5764,
+        "completion_tokens_details": {
+          "reasoning_tokens": 13
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 2545
+        }
+      },
+      "reasoning_tokens": 13,
+      "finish_reason": "tool_calls",
+      "estimated_cost_usd": 0.007796,
+      "error": null
+    },
+    {
+      "http_status": 200,
+      "usage": {
+        "completion_tokens": 1014,
+        "prompt_tokens": 8224,
+        "total_tokens": 9238,
+        "completion_tokens_details": {
+          "reasoning_tokens": 401
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 5489
+        }
+      },
+      "reasoning_tokens": 401,
+      "finish_reason": "tool_calls",
+      "estimated_cost_usd": 0.01459,
+      "error": null
+    },
+    {
+      "http_status": 200,
+      "usage": {
+        "completion_tokens": 360,
+        "prompt_tokens": 9401,
+        "total_tokens": 9761,
+        "completion_tokens_details": {
+          "reasoning_tokens": 297
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 3441
+        }
+      },
+      "reasoning_tokens": 297,
+      "finish_reason": "tool_calls",
+      "estimated_cost_usd": 0.013281,
+      "error": null
+    },
+    {
+      "http_status": 200,
+      "usage": {
+        "completion_tokens": 1072,
+        "prompt_tokens": 9525,
+        "total_tokens": 10597,
+        "completion_tokens_details": {
+          "reasoning_tokens": 488
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 8177
+        }
+      },
+      "reasoning_tokens": 488,
+      "finish_reason": "stop",
+      "estimated_cost_usd": 0.016462,
+      "error": null
+    },
+    {
+      "http_status": 200,
+      "usage": {
+        "completion_tokens": 781,
+        "prompt_tokens": 10128,
+        "total_tokens": 10909,
+        "completion_tokens_details": {
+          "reasoning_tokens": 229
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 9457
+        }
+      },
+      "reasoning_tokens": 229,
+      "finish_reason": "tool_calls",
+      "estimated_cost_usd": 0.015979,
+      "error": null
+    }
+  ],
+  "usage_successful_call": {
+    "prompt_tokens": 48889,
+    "completion_tokens": 4092,
+    "completion_tokens_details": {
+      "reasoning_tokens": 1534
+    }
+  },
+  "totals_all_attempts": {
+    "prompt_tokens": 48889,
+    "completion_tokens": 4092,
+    "reasoning_tokens": 1534
+  },
+  "estimated_cost_usd": 0.078502,
+  "cumulative_hackathon_usd": 0.442402,
+  "tool_log": [
+    {
+      "step": 1,
+      "tool": "validate_events",
+      "args": {},
+      "result": {
+        "events_checked": 8,
+        "purchase_events": 2,
+        "anomalies": [
+          {
+            "event_index": 5,
+            "problem": "purchase currency GBP does not match the funnel currency USD"
+          },
+          {
+            "event_index": 6,
+            "problem": "purchase currency GBP does not match the funnel currency USD"
+          },
+          {
+            "event_indexes": [
+              5,
+              6
+            ],
+            "problem": "transaction_id HP-2026-7319 is recorded 2 times \u2014 the same purchase counted more than once"
+          }
+        ]
+      }
+    },
+    {
+      "step": 2,
+      "tool": "replay_trace",
+      "args": {},
+      "result": {
+        "calls_checked": 4,
+        "flagged": 1,
+        "calls": [
+          {
+            "call": "t-201",
+            "tool": "inventory.check_stock",
+            "verdict": "replayable",
+            "reasons": []
+          },
+          {
+            "call": "t-202",
+            "tool": "payments.charge_card",
+            "verdict": "UNREPLAYABLE/UNSAFE",
+            "reasons": [
+              "RETRY-UNSAFE: 2 settled charges on one call and idempotency_key is null \u2014 a gateway retry repeated the charge; replaying this call repeats the side effect"
+            ]
+          },
+          {
+            "call": "t-203",
+            "tool": "notifications.send_receipt",
+            "verdict": "replayable",
+            "reasons": []
+          },
+          {
+            "call": "t-204",
+            "tool": "reports.weekly_rollup",
+            "verdict": "replayable",
+            "reasons": []
+          }
+        ]
+      }
+    },
+    {
+      "step": 3,
+      "tool": "scrub_pii",
+      "args": {
+        "file": "tool_trace.jsonl"
+      },
+      "result": {
+        "file": "tool_trace.jsonl",
+        "changed": true,
+        "pii_findings": [
+          {
+            "detector": "PAT-EMAIL",
+            "category": "email",
+            "redaction": "[REDACTED:email]"
+          },
+          {
+            "detector": "PAT-PHONE",
+            "category": "phone",
+            "redaction": "[REDACTED:phone]"
+          }
+        ],
+        "note": "counts and categories only \u2014 raw values never leave the machine; the redacted text is the only version that may be stored or shown"
+      }
+    },
+    {
+      "step": 4,
+      "tool": "scan_secrets",
+      "args": {
+        "file": "git_commit_diff.txt"
+      },
+      "result": {
+        "file": "git_commit_diff.txt",
+        "findings": [],
+        "active_findings": 0,
+        "allowlisted": 0,
+        "suppressed": 0,
+        "scanner_exit_code": 0
+      }
+    },
+    {
+      "step": 5,
+      "tool": "scan_secrets",
+      "args": {
+        "file": "gtm_container.json"
+      },
+      "result": {
+        "file": "gtm_container.json",
+        "findings": [
+          {
+            "detector": "ENT-SECRET-CTX",
+            "kind": "entropy_secret",
+            "severity": "high",
+            "line": 4
+          },
+          {
+            "detector": "ENT-SECRET",
+            "kind": "entropy_secret",
+            "severity": "high",
+            "line": 54
+          }
+        ],
+        "active_findings": 2,
+        "allowlisted": 0,
+        "suppressed": 0,
+        "scanner_exit_code": 2
+      }
+    },
+    {
+      "step": 6,
+      "tool": "scan_secrets",
+      "args": {
+        "file": "tool_trace.jsonl"
+      },
+      "result": {
+        "file": "tool_trace.jsonl",
+        "findings": [
+          {
+            "detector": "PAT-EMAIL",
+            "kind": "email",
+            "severity": "low",
+            "line": 3
+          },
+          {
+            "detector": "PAT-PHONE",
+            "kind": "phone",
+            "severity": "low",
+            "line": 3
+          }
+        ],
+        "active_findings": 2,
+        "allowlisted": 0,
+        "suppressed": 0,
+        "scanner_exit_code": 1
+      }
+    },
+    {
+      "step": 7,
+      "tool": "scan_secrets",
+      "args": {
+        "file": "ga4_events.json"
+      },
+      "result": {
+        "file": "ga4_events.json",
+        "findings": [],
+        "active_findings": 0,
+        "allowlisted": 0,
+        "suppressed": 0,
+        "scanner_exit_code": 0
+      }
+    },
+    {
+      "step": 8,
+      "tool": "scan_injection",
+      "args": {
+        "file": "tool_trace.jsonl"
+      },
+      "result": {
+        "file": "tool_trace.jsonl",
+        "decision": "allow",
+        "findings": [],
+        "findings_total": 0
+      }
+    },
+    {
+      "step": 9,
+      "tool": "scan_injection",
+      "args": {
+        "file": "gtm_container.json"
+      },
+      "result": {
+        "file": "gtm_container.json",
+        "decision": "allow",
+        "findings": [],
+        "findings_total": 0
+      }
+    },
+    {
+      "step": 10,
+      "tool": "read_file",
+      "args": {
+        "file": "ga4_events.json"
+      },
+      "result": {
+        "file": "ga4_events.json",
+        "content_numbered": "   1| {\n   2|  \"measurement_id\": \"G-HPINE00000\",\n   3|  \"stream\": \"Harbor & Pine Outdoors \\u2014 web (SYNTHETIC)\",\n   4|  \"client\": \"web \\u00b7 gtag.js\",\n   5|  \"events\": [\n   6|   {\n   7|    \"name\": \"session_start\",\n   8|    \"ts\": \"2026-10-24T15:02:11Z\",\n   9|    \"params\": {\n  10|     \"engagement_time_msec\": 100\n  11|    }\n  12|   },\n  13|   {\n  14|    \"name\": \"page_view\",\n  15|    \"ts\": \"2026-10-24T15:02:14Z\",\n  16|    \"params\": {\n  17|     \"page_location\": \"https://shop.example.invalid/collections/trail-packs\",\n  18|     \"page_title\": \"Trail Packs\"\n  19|    }\n  20|   },\n  21|   {\n  22|    \"name\": \"view_item\",\n  23|    \"ts\": \"2026-10-24T15:04:39Z\",\n  24|    \"params\": {\n  25|     \"currency\": \"USD\",\n  26|     \"value\": 144.0,\n  27|     \"items\": [\n  28|      {\n  29|       \"item_id\": \"HP-PACK-310\",\n  30|       \"item_name\": \"Ridgeline Pack 40L\",\n  31|       \"price\": 48.0,\n  32|       \"quantity\": 3\n  33|      }\n  34|     ]\n  35|    }\n  36|   },\n  37|   {\n  38|    \"name\": \"add_to_cart\",\n  39|    \"ts\": \"2026-10-24T15:06:02Z\",\n  40|    \"params\": {\n  41|     \"currency\": \"USD\",\n  42|     \"value\": 144.0,\n  43|     \"items\": [\n  44|      {\n  45|       \"item_id\": \"HP-PACK-310\",\n  46|       \"item_name\": \"Ridgeline Pack 40L\",\n  47|       \"price\": 48.0,\n  48|       \"quantity\": 3\n  49|      }\n  50|     ]\n  51|    }\n  52|   },\n  53|   {\n  54|    \"name\": \"begin_checkout\",\n  55|    \"ts\": \"2026-10-24T15:09:48Z\",\n  56|    \"params\": {\n  57|     \"currency\": \"USD\",\n  58|     \"value\": 144.0,\n  59|     \"items\": [\n  60|      {\n  61|       \"item_id\": \"HP-PACK-310\",\n  62|       \"item_name\": \"Ridgeline Pack 40L\",\n  63|       \"price\": 48.0,\n  64|       \"quantity\": 3\n  65|      }\n  66|     ]\n  67|    }\n  68|   },\n  69|   {\n  70|    \"name\": \"purchase\",\n  71|    \"ts\": \"2026-10-24T15:11:20Z\",\n  72|    \"params\": {\n  73|     \"currency\": \"GBP\",\n  74|     \"value\": 144.0,\n  75|     \"tax\": 0,\n  76|     \"transaction_id\": \"HP-2026-7319\",\n  77|     \"items\": [\n  78|      {\n  79|       \"item_id\": \"HP-PACK-310\",\n  80|       \"item_name\": \"Ridgeline Pack 40L\",\n  81|       \"price\": 48.0,\n  82|       \"quantity\": 3\n  83|      }\n  84|     ]\n  85|    }\n  86|   },\n  87|   {\n  88|    \"name\": \"purchase\",\n  89|    \"ts\": \"2026-10-24T15:11:24Z\",\n  90|    \"params\": {\n  91|     \"currency\": \"GBP\",\n  92|     \"value\": 144.0,\n  93|     \"tax\": 0,\n  94|     \"transaction_id\": \"HP-2026-7319\",\n  95|     \"items\": [\n  96|      {\n  97|       \"item_id\": \"HP-PACK-310\",\n  98|       \"item_name\": \"Ridgeline Pack 40L\",\n  99|       \"price\": 48.0,\n 100|       \"quantity\": 3\n 101|      }\n 102|     ]\n 103|    }\n 104|   },\n 105|   {\n 106|    \"name\": \"refund\",\n 107|    \"ts\": \"2026-10-25T08:14:03Z\",\n 108|    \"params\": {\n 109|     \"currency\": \"USD\",\n 110|     \"value\": 32.0,\n 111|     \"transaction_id\": \"HP-2026-7302\",\n 112|     \"items\": [\n 113|      {\n 114|       \"item_id\": \"HP-MUG-021\",\n 115|       \"item_name\": \"Enamel Camp Mug\",\n 116|       \"price\": 32.0,\n 117|       \"quantity\": 1\n 118|      }\n 119|     ]\n 120|    }\n 121|   }\n 122|  ]\n 123| }"
+      }
+    },
+    {
+      "step": 11,
+      "tool": "read_file",
+      "args": {
+        "file": "gtm_container.json"
+      },
+      "result": {
+        "file": "gtm_container.json",
+        "content_numbered": "   1| {\n   2|  \"exportFormatVersion\": 2,\n   3|  \"containerVersion\": {\n   4|   \"path\": \"accounts/0000000/containers/HP000000/versions/9\",\n   5|   \"container\": {\n   6|    \"name\": \"Harbor & Pine \\u2014 web (SYNTHETIC)\",\n   7|    \"publicId\": \"GTM-HP00000\",\n   8|    \"usageContext\": [\n   9|     \"web\"\n  10|    ]\n  11|   },\n  12|   \"tag\": [\n  13|    {\n  14|     \"tagId\": \"21\",\n  15|     \"name\": \"GA4 \\u2014 Configuration\",\n  16|     \"type\": \"gaawe\",\n  17|     \"firingTriggerId\": [\n  18|      \"2147479553\"\n  19|     ],\n  20|     \"parameter\": [\n  21|      {\n  22|       \"key\": \"measurementId\",\n  23|       \"type\": \"template\",\n  24|       \"value\": \"G-HPINE00000\"\n  25|      }\n  26|     ]\n  27|    },\n  28|    {\n  29|     \"tagId\": \"22\",\n  30|     \"name\": \"GA4 \\u2014 purchase\",\n  31|     \"type\": \"gaawe\",\n  32|     \"firingTriggerId\": [\n  33|      \"44\"\n  34|     ],\n  35|     \"parameter\": [\n  36|      {\n  37|       \"key\": \"eventName\",\n  38|       \"type\": \"template\",\n  39|       \"value\": \"purchase\"\n  40|      }\n  41|     ]\n  42|    },\n  43|    {\n  44|     \"tagId\": \"23\",\n  45|     \"name\": \"Shipping Rates \\u2014 Lookup (custom HTML)\",\n  46|     \"type\": \"html\",\n  47|     \"firingTriggerId\": [\n  48|      \"2147479553\"\n  49|     ],\n  50|     \"parameter\": [\n  51|      {\n  52|       \"key\": \"html\",\n  53|       \"type\": \"template\",\n  54|       \"value\": \"<script>\\n  // rates config ships encoded so it is not sitting in plain sight\\n  var _hpcfg = JSON.parse(atob('eyJocF9yYXRlc19rZXkiOiAiSFBfVE9LRU5fZjRrM19kMF9uMHRfdXMzXzExMjIzMyJ9'));\\n  fetch('https://rates.example.invalid/v1/quote', {\\n    method: 'POST',\\n    headers: { 'Authorization': 'Bearer ' + _hpcfg.hp_rates_key }\\n  });\\n</script>\"\n  55|      }\n  56|     ]\n  57|    }\n  58|   ],\n  59|   \"trigger\": [\n  60|    {\n  61|     \"triggerId\": \"2147479553\",\n  62|     \"name\": \"Initialization \\u2014 All Pages\",\n  63|     \"type\": \"init\"\n  64|    },\n  65|    {\n  66|     \"triggerId\": \"44\",\n  67|     \"name\": \"DL \\u2014 purchase complete\",\n  68|     \"type\": \"custom_event\",\n  69|     \"customEventFilter\": [\n  70|      {\n  71|       \"type\": \"equals\",\n  72|       \"parameter\": [\n  73|        {\n  74|         \"key\": \"arg0\",\n  75|         \"type\": \"template\",\n  76|         \"value\": \"{{_event}}\"\n  77|        },\n  78|        {\n  79|         \"key\": \"arg1\",\n  80|         \"type\": \"template\",\n  81|         \"value\": \"purchase\"\n  82|        }\n  83|       ]\n  84|      }\n  85|     ]\n  86|    }\n  87|   ],\n  88|   \"variable\": [\n  89|    {\n  90|     \"variableId\": \"51\",\n  91|     \"name\": \"DLV \\u2014 transactionId\",\n  92|     \"type\": \"v\",\n  93|     \"parameter\": [\n  94|      {\n  95|       \"key\": \"dataLayerVersion\",\n  96|       \"type\": \"integer\",\n  97|       \"value\": \"2\"\n  98|      },\n  99|      {\n 100|       \"key\": \"name\",\n 101|       \"type\": \"template\",\n 102|       \"value\": \"transaction_id\"\n 103|      }\n 104|     ]\n 105|    },\n 106|    {\n 107|     \"variableId\": \"52\",\n 108|     \"name\": \"CONST \\u2014 storefront currency\",\n 109|     \"type\": \"c\",\n 110|     \"parameter\": [\n 111|      {\n 112|       \"key\": \"value\",\n 113|       \"type\": \"template\",\n 114|       \"value\": \"USD\"\n 115|      }\n 116|     ]\n 117|    }\n 118|   ]\n 119|  }\n 120| }"
+      }
+    },
+    {
+      "step": 12,
+      "tool": "read_file",
+      "args": {
+        "file": "tool_trace.jsonl"
+      },
+      "result": {
+        "file": "tool_trace.jsonl",
+        "content_numbered": "   1| {\"call\": \"t-201\", \"tool_name\": \"inventory.check_stock\", \"recorded_at\": \"2026-10-24T15:08:31Z\", \"input\": {\"sku\": \"HP-PACK-310\", \"warehouse\": \"us-west-2\"}, \"result\": {\"on_hand\": 57, \"reserved\": 4}, \"replay\": \"supported\"}\n   2| {\"call\": \"t-202\", \"tool_name\": \"payments.charge_card\", \"recorded_at\": \"2026-10-24T15:11:21Z\", \"input\": {\"order_ref\": \"HP-2026-7319\", \"amount_cents\": 14400, \"currency\": \"USD\", \"idempotency_key\": null, \"card_token\": \"tok_hp_demo_9042\"}, \"result\": {\"status\": \"settled\", \"charges\": [{\"charge_id\": \"ch_hp_441\", \"amount_cents\": 14400}, {\"charge_id\": \"ch_hp_442\", \"amount_cents\": 14400}], \"note\": \"first attempt timed out at the gateway; the client retried the charge\"}, \"replay\": \"supported\"}\n   3| {\"call\": \"t-203\", \"tool_name\": \"notifications.send_receipt\", \"recorded_at\": \"2026-10-24T15:12:07Z\", \"input\": {\"order_ref\": \"HP-2026-7319\", \"customer_email\": \"lena.ortiz.fictional@example.invalid\", \"customer_phone\": \"+1-555-014-2288\", \"template\": \"order_confirmation\"}, \"result\": {\"message_id\": \"msg_hp_8810\", \"channel\": \"email+sms\"}, \"replay\": \"supported\"}\n   4| {\"call\": \"t-204\", \"tool_name\": \"reports.weekly_rollup\", \"recorded_at\": \"2026-10-25T06:00:00Z\", \"input\": {\"week_ending\": \"2026-10-31\", \"property\": \"G-HPINE00000\"}, \"result\": {\"sessions\": 8931, \"orders\": 204}, \"replay\": \"supported\"}"
+      }
+    },
+    {
+      "step": 13,
+      "tool": "read_file",
+      "args": {
+        "file": "git_commit_diff.txt"
+      },
+      "result": {
+        "file": "git_commit_diff.txt",
+        "content_numbered": "   1| commit hp73a19c04d1 \u2014 \"tune the harbor sync worker backoff\" (SYNTHETIC, invented for the demo)\n   2| \n   3| diff --git a/workers/harbor_sync.py b/workers/harbor_sync.py\n   4| --- a/workers/harbor_sync.py\n   5| +++ b/workers/harbor_sync.py\n   6| @@ -8,14 +8,20 @@ import os\n   7|  import time\n   8|  \n   9|  import requests\n  10|  \n  11| -API_TOKEN = os.environ[\"HARBOR_SYNC_TOKEN\"]\n  12| +API_TOKEN = os.environ[\"HARBOR_SYNC_TOKEN\"]\n  13|  BASE_URL = \"https://sync.example.invalid/v1\"\n  14| -RETRY_LIMIT = 2\n  15| +RETRY_LIMIT = 3\n  16| +BACKOFF_SECONDS = 2.0\n  17|  \n  18|  \n  19|  def push_batch(records):\n  20|      headers = {\"Authorization\": f\"Bearer {API_TOKEN}\"}\n  21| -    for attempt in range(RETRY_LIMIT):\n  22| +    for attempt in range(RETRY_LIMIT + 1):\n  23|          try:\n  24|              resp = requests.post(BASE_URL + \"/orders\", json=records,\n  25|                                   headers=headers, timeout=10)\n  26|              resp.raise_for_status()\n  27|              return resp.json()\n  28|          except requests.RequestException:\n  29| -            time.sleep(1)\n  30| +            if attempt == RETRY_LIMIT:\n  31| +                raise\n  32| +            time.sleep(BACKOFF_SECONDS * (attempt + 1))\n  33|      return None"
+      }
+    },
+    {
+      "step": 14,
+      "tool": "propose_fix",
+      "args": {
+        "fault_ref": "currency-mismatch-gbp",
+        "target_file": "ga4_events.json",
+        "change": "Normalize purchase events currency to USD matching funnel and storefront constant",
+        "irreversible": false
+      },
+      "result": {
+        "verdict": "BLOCKED",
+        "gate_action": "require_approval",
+        "gate_rule": "policy-default",
+        "reason": "policy default: every fix requires human approval",
+        "applied": false,
+        "proposed_change": "Normalize purchase events currency to USD matching funnel and storefront constant",
+        "note": "the gate decides; nothing is applied by this tool, ever"
+      }
+    },
+    {
+      "step": 15,
+      "tool": "propose_fix",
+      "args": {
+        "fault_ref": "duplicate-purchase",
+        "target_file": "ga4_events.json",
+        "change": "Deduplicate purchase event for transaction_id HP-2026-7319 keeping single event",
+        "irreversible": false
+      },
+      "result": {
+        "verdict": "BLOCKED",
+        "gate_action": "require_approval",
+        "gate_rule": "policy-default",
+        "reason": "policy default: every fix requires human approval",
+        "applied": false,
+        "proposed_change": "Deduplicate purchase event for transaction_id HP-2026-7319 keeping single event",
+        "note": "the gate decides; nothing is applied by this tool, ever"
+      }
+    },
+    {
+      "step": 16,
+      "tool": "propose_fix",
+      "args": {
+        "fault_ref": "obfuscated-secret-gtm",
+        "target_file": "gtm_container.json",
+        "change": "Remove hardcoded base64 encoded bearer token from custom HTML tag and load from server secrets",
+        "irreversible": false
+      },
+      "result": {
+        "verdict": "BLOCKED",
+        "gate_action": "require_approval",
+        "gate_rule": "policy-default",
+        "reason": "policy default: every fix requires human approval",
+        "applied": false,
+        "proposed_change": "Remove hardcoded base64 encoded bearer token from custom HTML tag and load from server secrets",
+        "note": "the gate decides; nothing is applied by this tool, ever"
+      }
+    },
+    {
+      "step": 17,
+      "tool": "propose_fix",
+      "args": {
+        "fault_ref": "missing-idempotency-charge",
+        "target_file": "tool_trace.jsonl",
+        "change": "Require idempotency_key for payments.charge_card and prevent retry without key",
+        "irreversible": false
+      },
+      "result": {
+        "verdict": "BLOCKED",
+        "gate_action": "require_approval",
+        "gate_rule": "policy-default",
+        "reason": "policy default: every fix requires human approval",
+        "applied": false,
+        "proposed_change": "Require idempotency_key for payments.charge_card and prevent retry without key",
+        "note": "the gate decides; nothing is applied by this tool, ever"
+      }
+    },
+    {
+      "step": 18,
+      "tool": "propose_fix",
+      "args": {
+        "fault_ref": "pii-exposure-receipt",
+        "target_file": "tool_trace.jsonl",
+        "change": "Redact customer_email and customer_phone from tool trace and store only hashed references",
+        "irreversible": false
+      },
+      "result": {
+        "verdict": "BLOCKED",
+        "gate_action": "require_approval",
+        "gate_rule": "policy-default",
+        "reason": "policy default: every fix requires human approval",
+        "applied": false,
+        "proposed_change": "Redact customer_email and customer_phone from tool trace and store only hashed references",
+        "note": "the gate decides; nothing is applied by this tool, ever"
+      }
+    },
+    {
+      "step": 19,
+      "tool": "compute_impacts",
+      "args": {},
+      "result": {
+        "totals": [],
+        "impacts_by_fault_ref": {},
+        "note": "every figure computed from the dataset files by code \u2014 attach these to the findings you identified; invent none"
+      }
+    },
+    {
+      "step": 20,
+      "tool": "render_report",
+      "args": {
+        "findings": [
+          {
+            "file": "ga4_events.json",
+            "line": 70,
+            "severity": "high",
+            "fault_type": "currency_mismatch",
+            "issue": "purchase event currency GBP does not match funnel currency USD and storefront constant USD",
+            "fix": "Normalize purchase currency to USD matching funnel"
+          },
+          {
+            "file": "ga4_events.json",
+            "line": 88,
+            "severity": "high",
+            "fault_type": "currency_mismatch",
+            "issue": "purchase event currency GBP does not match funnel currency USD on second occurrence",
+            "fix": "Normalize purchase currency to USD"
+          },
+          {
+            "file": "ga4_events.json",
+            "line": 88,
+            "severity": "high",
+            "fault_type": "duplicate_event",
+            "issue": "transaction_id HP-2026-7319 recorded twice counting same purchase two times",
+            "fix": "Deduplicate purchase keeping earliest event for HP-2026-7319"
+          },
+          {
+            "file": "gtm_container.json",
+            "line": 54,
+            "severity": "high",
+            "fault_type": "obfuscated_secret",
+            "issue": "bearer token hp_rates_key hidden via atob base64 in custom HTML tag Shipping Rates",
+            "fix": "Remove encoded secret from tag and fetch via server-side secrets"
+          },
+          {
+            "file": "tool_trace.jsonl",
+            "line": 2,
+            "severity": "high",
+            "fault_type": "missing_idempotency",
+            "issue": "payments.charge_card call t-202 has idempotency_key null and retried after timeout",
+            "fix": "Require idempotency_key for charge_card and block retry without key"
+          },
+          {
+            "file": "tool_trace.jsonl",
+            "line": 2,
+            "severity": "high",
+            "fault_type": "unsafe_replay",
+            "issue": "payments.charge_card call t-202 settled 2 charges ch_hp_441 and ch_hp_442 on one call",
+            "fix": "Add idempotency check and refund duplicate charge ch_hp_442"
+          },
+          {
+            "file": "tool_trace.jsonl",
+            "line": 3,
+            "severity": "medium",
+            "fault_type": "pii_exposure",
+            "issue": "customer_email and customer_phone exposed in notifications.send_receipt input t-203",
+            "fix": "Redact email and phone from trace and store hashed references only"
+          }
+        ]
+      },
+      "result": {
+        "submitted": 7,
+        "note": "findings submitted \u2014 the harness now grades them and renders the report. The audit is complete."
+      }
+    }
+  ],
+  "gate_log": [
+    {
+      "fault_ref": "currency-mismatch-gbp",
+      "target_file": "ga4_events.json",
+      "change": "Normalize purchase events currency to USD matching funnel and storefront constant",
+      "irreversible": false,
+      "verdict": "BLOCKED",
+      "gate_action": "require_approval",
+      "gate_rule": "policy-default",
+      "reason": "policy default: every fix requires human approval",
+      "applied": false,
+      "proposed_change": "Normalize purchase events currency to USD matching funnel and storefront constant",
+      "note": "the gate decides; nothing is applied by this tool, ever"
+    },
+    {
+      "fault_ref": "duplicate-purchase",
+      "target_file": "ga4_events.json",
+      "change": "Deduplicate purchase event for transaction_id HP-2026-7319 keeping single event",
+      "irreversible": false,
+      "verdict": "BLOCKED",
+      "gate_action": "require_approval",
+      "gate_rule": "policy-default",
+      "reason": "policy default: every fix requires human approval",
+      "applied": false,
+      "proposed_change": "Deduplicate purchase event for transaction_id HP-2026-7319 keeping single event",
+      "note": "the gate decides; nothing is applied by this tool, ever"
+    },
+    {
+      "fault_ref": "obfuscated-secret-gtm",
+      "target_file": "gtm_container.json",
+      "change": "Remove hardcoded base64 encoded bearer token from custom HTML tag and load from server secrets",
+      "irreversible": false,
+      "verdict": "BLOCKED",
+      "gate_action": "require_approval",
+      "gate_rule": "policy-default",
+      "reason": "policy default: every fix requires human approval",
+      "applied": false,
+      "proposed_change": "Remove hardcoded base64 encoded bearer token from custom HTML tag and load from server secrets",
+      "note": "the gate decides; nothing is applied by this tool, ever"
+    },
+    {
+      "fault_ref": "missing-idempotency-charge",
+      "target_file": "tool_trace.jsonl",
+      "change": "Require idempotency_key for payments.charge_card and prevent retry without key",
+      "irreversible": false,
+      "verdict": "BLOCKED",
+      "gate_action": "require_approval",
+      "gate_rule": "policy-default",
+      "reason": "policy default: every fix requires human approval",
+      "applied": false,
+      "proposed_change": "Require idempotency_key for payments.charge_card and prevent retry without key",
+      "note": "the gate decides; nothing is applied by this tool, ever"
+    },
+    {
+      "fault_ref": "pii-exposure-receipt",
+      "target_file": "tool_trace.jsonl",
+      "change": "Redact customer_email and customer_phone from tool trace and store only hashed references",
+      "irreversible": false,
+      "verdict": "BLOCKED",
+      "gate_action": "require_approval",
+      "gate_rule": "policy-default",
+      "reason": "policy default: every fix requires human approval",
+      "applied": false,
+      "proposed_change": "Redact customer_email and customer_phone from tool trace and store only hashed references",
+      "note": "the gate decides; nothing is applied by this tool, ever"
+    }
+  ],
+  "model_findings": [
+    {
+      "file": "ga4_events.json",
+      "line": 70,
+      "severity": "high",
+      "fault_type": "currency_mismatch",
+      "fault_title": "Currency mismatch",
+      "issue": "Currency mismatch: purchase event currency GBP does not match funnel currency USD and storefront constant USD",
+      "fix": "Normalize purchase currency to USD matching funnel"
+    },
+    {
+      "file": "ga4_events.json",
+      "line": 88,
+      "severity": "high",
+      "fault_type": "currency_mismatch",
+      "fault_title": "Currency mismatch",
+      "issue": "Currency mismatch: purchase event currency GBP does not match funnel currency USD on second occurrence",
+      "fix": "Normalize purchase currency to USD"
+    },
+    {
+      "file": "ga4_events.json",
+      "line": 88,
+      "severity": "high",
+      "fault_type": "duplicate_event",
+      "fault_title": "Duplicate event",
+      "issue": "Duplicate event: transaction_id HP-2026-7319 recorded twice counting same purchase two times",
+      "fix": "Deduplicate purchase keeping earliest event for HP-2026-7319"
+    },
+    {
+      "file": "gtm_container.json",
+      "line": 54,
+      "severity": "high",
+      "fault_type": "obfuscated_secret",
+      "fault_title": "Obfuscated secret",
+      "issue": "Obfuscated secret: bearer token hp_rates_key hidden via atob base64 in custom HTML tag Shipping Rates",
+      "fix": "Remove encoded secret from tag and fetch via server-side secrets"
+    },
+    {
+      "file": "tool_trace.jsonl",
+      "line": 2,
+      "severity": "high",
+      "fault_type": "missing_idempotency",
+      "fault_title": "Missing idempotency",
+      "issue": "Missing idempotency: payments.charge_card call t-202 has idempotency_key null and retried after timeout",
+      "fix": "Require idempotency_key for charge_card and block retry without key"
+    },
+    {
+      "file": "tool_trace.jsonl",
+      "line": 2,
+      "severity": "high",
+      "fault_type": "unsafe_replay",
+      "fault_title": "Unsafe replay",
+      "issue": "Unsafe replay: payments.charge_card call t-202 settled 2 charges ch_hp_441 and ch_hp_442 on one call",
+      "fix": "Add idempotency check and refund duplicate charge ch_hp_442"
+    },
+    {
+      "file": "tool_trace.jsonl",
+      "line": 3,
+      "severity": "medium",
+      "fault_type": "pii_exposure",
+      "fault_title": "PII exposure",
+      "issue": "PII exposure: customer_email and customer_phone exposed in notifications.send_receipt input t-203",
+      "fix": "Redact email and phone from trace and store hashed references only"
+    }
+  ],
+  "mapping": {
+    "0": "FAULT-V4-1",
+    "2": "FAULT-V4-2",
+    "3": "FAULT-V4-3",
+    "4": "FAULT-V4-4",
+    "6": "FAULT-V4-5"
+  },
+  "grader_error": null,
+  "grader_uncovered_ids": [],
+  "grader_matched_phrases": {
+    "0": {
+      "fault": "FAULT-V4-1",
+      "phrases": [
+        "currency",
+        "gbp",
+        "usd",
+        "mismatch"
+      ]
+    },
+    "2": {
+      "fault": "FAULT-V4-2",
+      "phrases": [
+        "duplicate",
+        "twice"
+      ]
+    },
+    "3": {
+      "fault": "FAULT-V4-3",
+      "phrases": [
+        "base64",
+        "atob",
+        "encoded",
+        "obfuscat",
+        "token",
+        "key",
+        "hidden"
+      ]
+    },
+    "4": {
+      "fault": "FAULT-V4-4",
+      "phrases": [
+        "idempotency",
+        "retry"
+      ]
+    },
+    "6": {
+      "fault": "FAULT-V4-5",
+      "phrases": [
+        "email",
+        "phone",
+        "pii",
+        "input"
+      ]
+    }
+  },
+  "score": {
+    "caught": [
+      "FAULT-V4-1",
+      "FAULT-V4-2",
+      "FAULT-V4-3",
+      "FAULT-V4-4",
+      "FAULT-V4-5"
+    ],
+    "missed": [],
+    "model_audit": "5/5",
+    "spec_target": "5/5",
+    "gate_blocked": 5,
+    "gate_approved": 0
+  }
+}
