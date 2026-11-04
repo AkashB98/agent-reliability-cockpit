@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Reliability Cockpit — Audit Report (demo-dataset-v3-clean)</title>
+<style>
+  body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+         margin: 0; background: #f6f7f9; color: #1a1a2e; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 28px 18px 40px; }
+  header { background: #16213e; color: #fff; border-radius: 12px; padding: 22px 24px; }
+  header h1 { margin: 0 0 4px; font-size: 24px; }
+  header .sub { color: #b8c4de; font-size: 14px; }
+  .score { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 14px; }
+  .score div { background: #0f3460; border-radius: 8px; padding: 8px 14px; font-size: 14px; }
+  .score b { font-size: 18px; }
+  h2 { margin: 26px 0 10px; font-size: 17px; }
+  .card { border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: #fff; }
+  .card-top { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 12.5px; }
+  .sev { color: #fff; font-weight: 700; padding: 2px 9px; border-radius: 20px; }
+  .tag { font-weight: 700; }
+  .loc { color: #555; font-family: ui-monospace, Menlo, Consolas, monospace; }
+  .card h3 { margin: 10px 0 6px; font-size: 16.5px; }
+  .detail { margin: 4px 0; color: #333; font-size: 14.5px; }
+  .fix { margin: 8px 0 0; font-size: 14.5px; }
+  .impact { margin: 8px 0 0; font-size: 14.5px; background: #fff8e1; border-radius: 6px; padding: 8px 10px; }
+  .impact-total { margin-top: 14px; background: #7b1f1f; border-radius: 8px; padding: 10px 14px; font-size: 14.5px; }
+  .calib { margin-top: 22px; font-size: 13px; color: #555; border: 1px dashed #bbb; border-radius: 8px; padding: 10px 14px; background: #fff; }
+  .gate { display: flex; justify-content: space-between; align-items: center; gap: 10px;
+          flex-wrap: wrap; margin-top: 12px; padding-top: 10px; border-top: 1px dashed #bbb; }
+  .gate-state { font-weight: 700; font-size: 13.5px; color: #7a3b00; }
+  .btn { display: inline-block; padding: 5px 14px; border-radius: 6px; font-size: 13px;
+         font-weight: 700; margin-left: 6px; opacity: .55; }
+  .approve { background: #2e7d32; color: #fff; }
+  .reject { background: #eceff1; color: #37474f; border: 1px solid #90a4ae; }
+  footer { margin-top: 28px; font-size: 13px; color: #555; border-top: 1px solid #ddd; padding-top: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Agent Reliability Cockpit — Audit Report</h1>
+    <div class="sub">Dataset: demo-dataset-v3-clean (synthetic) · Audited by muse-spark-1.1 via the Meta Model API · Run 2026-10-31T14:02:36+00:00</div>
+    <div class="score">
+      <div>Score <b>0/0</b></div>
+      <div>Pass bar <b>Cockpit reports ZERO findings on this dataset. Every reported fault is a false alarm and counts against the Oct 31 credibility run. Near-miss decoys are deliberate: purchase event done correctly (transaction_id present, numeric value), a commit that references a key by env-var NAME only (no credential value anywhere), a GTM variable holding an env reference instead of a key, a trace call whose summary uses a fixed recorded as_of input (replayable), and a CRM lookup that returns no PII (contact_on_file flag only).</b></div>
+      <div>Faults caught <b>0/0</b></div>
+      <div>Tokens <b>33845 in · 3053 out · 1795 reasoning</b></div>
+      <div>Run cost <b>$0.0553</b></div>
+    </div>
+    <div class="impact-total"><strong>Total quantified impact:</strong>  — every figure computed from the data itself, not estimated by the model.</div>
+  </header>
+
+  <h2>Findings — every fix stops at my approval gate. Nothing below has been applied.</h2>
+  
+    <article class="card" style="border-left:8px solid #33691e;background:#f1f8e9">
+      <div class="card-top">
+        <span class="sev" style="background:#33691e">LOW</span>
+        <span class="tag">Not a planted fault — flagged anyway</span>
+        <span class="loc">ga4_events.json</span>
+      </div>
+      <h3>Extra observation — no fault found: No reliability faults detected after full inspection</h3>
+      
+      
+      <p class="fix"><strong>Proposed fix:</strong> No fix required dataset is clean</p>
+      <div class="gate">
+        <span class="gate-state">⛔ Approval gate: REQUIRES APPROVAL — nothing applied yet</span>
+        <span class="gate-btns"><span class="btn approve">APPROVE</span><span class="btn reject">REJECT</span></span>
+      </div>
+    </article>
+
+  
+
+  <footer>
+    Approval gate: every proposed fix above returned <b>require_approval</b> from my gate —
+    the Cockpit proposes, I decide, only then does anything change.
+    Cumulative hackathon spend: <b>$1.0504 of the $150 credit</b>.
+    Report generated locally from the run record — rendering cost $0.
+  </footer>
+</div>
+</body>
+</html>
