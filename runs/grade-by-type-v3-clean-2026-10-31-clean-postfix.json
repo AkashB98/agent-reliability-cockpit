@@ -1,0 +1,15 @@
+{
+ "grader": "grade_by_type (secondary; strict phrase grader stays primary)",
+ "pre_registered": "2026-10-29",
+ "run_file": "agentic-loop-v3-clean-2026-10-31-clean-postfix.json",
+ "dataset": "demo-dataset-v3-clean",
+ "typed_score": "clean-pass",
+ "caught": [],
+ "missed": [],
+ "per_fault": [],
+ "false_alarm_indices": [],
+ "false_alarms": [],
+ "unclassified_other_indices": [],
+ "clean_pass": true,
+ "findings_submitted": 0
+}
