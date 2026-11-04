@@ -1,0 +1,161 @@
+{
+  "currency": "USD",
+  "credit_total_usd": 150,
+  "note": "Single source of truth for cumulative hackathon spend. Seeded 2026-10-29 from the 'Estimated cost' lines of runs/*.md (sum $0.3597) plus one explicitly accepted unitemized entry of $0.0042, reconciling to the stated true total of $0.3639 from the Oct 28 wrap-up (see day4-work-order-2026-10-29.md, Item 1). agentic_loop.py appends one entry per completed dataset run; nothing else edits this file by hand.",
+  "entries": [
+    {
+      "run_id": "run-2026-10-26-meta-audit",
+      "cost_usd": 0.0126,
+      "date": "2026-10-26",
+      "source": "runs/run-2026-10-26-meta-audit.md"
+    },
+    {
+      "run_id": "run-2026-10-26-meta-audit-2",
+      "cost_usd": 0.0058,
+      "date": "2026-10-26",
+      "source": "runs/run-2026-10-26-meta-audit-2.md"
+    },
+    {
+      "run_id": "run-2026-10-27-holdout-v2-retry",
+      "cost_usd": 0.0073,
+      "date": "2026-10-27",
+      "source": "runs/run-2026-10-27-holdout-v2-retry.md"
+    },
+    {
+      "run_id": "run-2026-10-27-model-judge-v1",
+      "cost_usd": 0.0025,
+      "date": "2026-10-27",
+      "source": "runs/run-2026-10-27-model-judge-v1.md"
+    },
+    {
+      "run_id": "run-2026-10-27-model-judge-holdout-v2",
+      "cost_usd": 0.005,
+      "date": "2026-10-27",
+      "source": "runs/run-2026-10-27-model-judge-holdout-v2.md"
+    },
+    {
+      "run_id": "run-2026-10-28-attempt1-agentic-loop-v1",
+      "cost_usd": 0.0101,
+      "date": "2026-10-28",
+      "source": "runs/run-2026-10-28-attempt1-agentic-loop-v1.md"
+    },
+    {
+      "run_id": "run-2026-10-28-attempt1-agentic-loop-holdout-v2",
+      "cost_usd": 0.0141,
+      "date": "2026-10-28",
+      "source": "runs/run-2026-10-28-attempt1-agentic-loop-holdout-v2.md"
+    },
+    {
+      "run_id": "run-2026-10-28-attempt2-agentic-loop-holdout-v2",
+      "cost_usd": 0.0478,
+      "date": "2026-10-28",
+      "source": "runs/run-2026-10-28-attempt2-agentic-loop-holdout-v2.md"
+    },
+    {
+      "run_id": "run-2026-10-28-attempt3-agentic-loop-holdout-v2",
+      "cost_usd": 0.0621,
+      "date": "2026-10-28",
+      "source": "runs/run-2026-10-28-attempt3-agentic-loop-holdout-v2.md"
+    },
+    {
+      "run_id": "run-2026-10-28-attempt4-agentic-loop-holdout-v2",
+      "cost_usd": 0.0484,
+      "date": "2026-10-28",
+      "source": "runs/run-2026-10-28-attempt4-agentic-loop-holdout-v2.md"
+    },
+    {
+      "run_id": "run-2026-10-28-agentic-loop-v1",
+      "cost_usd": 0.0457,
+      "date": "2026-10-28",
+      "source": "runs/run-2026-10-28-agentic-loop-v1.md"
+    },
+    {
+      "run_id": "run-2026-10-28-agentic-loop-v1-graderfix",
+      "cost_usd": 0.0443,
+      "date": "2026-10-28",
+      "source": "runs/run-2026-10-28-agentic-loop-v1-graderfix.md"
+    },
+    {
+      "run_id": "run-2026-10-28-agentic-loop-v2-holdout-graderfix",
+      "cost_usd": 0.054,
+      "date": "2026-10-28",
+      "source": "runs/run-2026-10-28-agentic-loop-v2-holdout-graderfix.md"
+    },
+    {
+      "run_id": "unitemized-small-calls-oct26-28",
+      "cost_usd": 0.0042,
+      "date": "2026-10-28",
+      "source": "accepted gap per day4-work-order-2026-10-29.md Item 1 (logged $0.3597 vs stated true total $0.3639)"
+    },
+    {
+      "run_id": "agentic-loop-v4-fresh-holdout-2026-10-31-v4-first-sight",
+      "cost_usd": 0.078502,
+      "timestamp": "2026-10-31T13:59:07+00:00"
+    },
+    {
+      "run_id": "agentic-loop-v2-holdout-2026-10-31-holdout-01",
+      "cost_usd": 0.050106,
+      "timestamp": "2026-10-31T14:00:02+00:00"
+    },
+    {
+      "run_id": "agentic-loop-v2-holdout-2026-10-31-holdout-02",
+      "cost_usd": 0.055097,
+      "timestamp": "2026-10-31T14:00:16+00:00"
+    },
+    {
+      "run_id": "agentic-loop-v2-holdout-2026-10-31-holdout-03",
+      "cost_usd": 0.053172,
+      "timestamp": "2026-10-31T14:00:33+00:00"
+    },
+    {
+      "run_id": "agentic-loop-v2-holdout-2026-10-31-holdout-04",
+      "cost_usd": 0.041084,
+      "timestamp": "2026-10-31T14:00:48+00:00"
+    },
+    {
+      "run_id": "agentic-loop-v2-holdout-2026-10-31-holdout-05",
+      "cost_usd": 0.06949,
+      "timestamp": "2026-10-31T14:01:00+00:00"
+    },
+    {
+      "run_id": "agentic-loop-v2-holdout-2026-10-31-holdout-06",
+      "cost_usd": 0.057348,
+      "timestamp": "2026-10-31T14:01:22+00:00"
+    },
+    {
+      "run_id": "agentic-loop-v2-holdout-2026-10-31-holdout-07",
+      "cost_usd": 0.050888,
+      "timestamp": "2026-10-31T14:01:37+00:00"
+    },
+    {
+      "run_id": "agentic-loop-v2-holdout-2026-10-31-holdout-08",
+      "cost_usd": 0.060867,
+      "timestamp": "2026-10-31T14:01:51+00:00"
+    },
+    {
+      "run_id": "agentic-loop-v2-holdout-2026-10-31-holdout-09",
+      "cost_usd": 0.05709,
+      "timestamp": "2026-10-31T14:02:05+00:00"
+    },
+    {
+      "run_id": "agentic-loop-v2-holdout-2026-10-31-holdout-10",
+      "cost_usd": 0.057573,
+      "timestamp": "2026-10-31T14:02:21+00:00"
+    },
+    {
+      "run_id": "agentic-loop-v3-clean-2026-10-31-clean",
+      "cost_usd": 0.055281,
+      "timestamp": "2026-10-31T14:02:36+00:00"
+    },
+    {
+      "run_id": "agentic-loop-v1-2026-10-31-timing",
+      "cost_usd": 0.064175,
+      "timestamp": "2026-10-31T14:02:55+00:00"
+    },
+    {
+      "run_id": "agentic-loop-v3-clean-2026-10-31-clean-postfix",
+      "cost_usd": 0.038865,
+      "timestamp": "2026-10-31T21:14:31+00:00"
+    }
+  ]
+}
