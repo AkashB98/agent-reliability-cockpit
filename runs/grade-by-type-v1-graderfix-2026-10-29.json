@@ -1,0 +1,81 @@
+{
+ "grader": "grade_by_type (secondary; strict phrase grader stays primary)",
+ "pre_registered": "2026-10-29",
+ "run_file": "agentic-loop-v1-2026-10-28-graderfix.json",
+ "dataset": "demo-dataset-v1",
+ "typed_score": "4/4",
+ "caught": [
+  "FAULT-1",
+  "FAULT-2",
+  "FAULT-3",
+  "FAULT-4"
+ ],
+ "missed": [],
+ "per_fault": [
+  {
+   "id": "FAULT-1",
+   "expected_type": "broken_event",
+   "alias_types": [
+    "missing_required_field",
+    "wrong_value_type"
+   ],
+   "expected_files": [
+    "ga4_events.json"
+   ],
+   "caught": true,
+   "finding_indices": [
+    0,
+    1
+   ]
+  },
+  {
+   "id": "FAULT-2",
+   "expected_type": "leaked_secret",
+   "alias_types": [
+    "exposed_secret"
+   ],
+   "expected_files": [
+    "git_commit_diff.txt",
+    "gtm_container.json"
+   ],
+   "caught": true,
+   "finding_indices": [
+    2,
+    3
+   ]
+  },
+  {
+   "id": "FAULT-3",
+   "expected_type": "unreplayable_tool_call",
+   "alias_types": [
+    "unsafe_replay"
+   ],
+   "expected_files": [
+    "tool_trace.jsonl"
+   ],
+   "caught": true,
+   "finding_indices": [
+    4
+   ]
+  },
+  {
+   "id": "FAULT-4",
+   "expected_type": "pii_in_tool_output",
+   "alias_types": [
+    "pii_exposure"
+   ],
+   "expected_files": [
+    "tool_trace.jsonl"
+   ],
+   "caught": true,
+   "finding_indices": [
+    5
+   ]
+  }
+ ],
+ "false_alarm_indices": [],
+ "false_alarms": [],
+ "unclassified_other_indices": [],
+ "clean_pass": null,
+ "findings_submitted": 6
+}
