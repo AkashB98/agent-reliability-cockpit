@@ -1,0 +1,120 @@
+{
+  "exportFormatVersion": 2,
+  "containerVersion": {
+    "path": "accounts/0000000/containers/HP000000/versions/9",
+    "container": {
+      "name": "Harbor & Pine \u2014 web (SYNTHETIC)",
+      "publicId": "GTM-HP00000",
+      "usageContext": [
+        "web"
+      ]
+    },
+    "tag": [
+      {
+        "tagId": "21",
+        "name": "GA4 \u2014 Configuration",
+        "type": "gaawe",
+        "firingTriggerId": [
+          "2147479553"
+        ],
+        "parameter": [
+          {
+            "key": "measurementId",
+            "type": "template",
+            "value": "G-HPINE00000"
+          }
+        ]
+      },
+      {
+        "tagId": "22",
+        "name": "GA4 \u2014 purchase",
+        "type": "gaawe",
+        "firingTriggerId": [
+          "44"
+        ],
+        "parameter": [
+          {
+            "key": "eventName",
+            "type": "template",
+            "value": "purchase"
+          }
+        ]
+      },
+      {
+        "tagId": "23",
+        "name": "Shipping Rates \u2014 Lookup (custom HTML)",
+        "type": "html",
+        "firingTriggerId": [
+          "2147479553"
+        ],
+        "parameter": [
+          {
+            "key": "html",
+            "type": "template",
+            "value": "<script>\n  // rates config ships encoded so it is not sitting in plain sight\n  var _hpcfg = JSON.parse(atob('eyJocF9yYXRlc19rZXkiOiAiSFBfVE9LRU5fZjRrM19kMF9uMHRfdXMzXzExMjIzMyJ9'));\n  fetch('https://rates.example.invalid/v1/quote', {\n    method: 'POST',\n    headers: { 'Authorization': 'Bearer ' + _hpcfg.hp_rates_key }\n  });\n</script>"
+          }
+        ]
+      }
+    ],
+    "trigger": [
+      {
+        "triggerId": "2147479553",
+        "name": "Initialization \u2014 All Pages",
+        "type": "init"
+      },
+      {
+        "triggerId": "44",
+        "name": "DL \u2014 purchase complete",
+        "type": "custom_event",
+        "customEventFilter": [
+          {
+            "type": "equals",
+            "parameter": [
+              {
+                "key": "arg0",
+                "type": "template",
+                "value": "{{_event}}"
+              },
+              {
+                "key": "arg1",
+                "type": "template",
+                "value": "purchase"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "variable": [
+      {
+        "variableId": "51",
+        "name": "DLV \u2014 transactionId",
+        "type": "v",
+        "parameter": [
+          {
+            "key": "dataLayerVersion",
+            "type": "integer",
+            "value": "2"
+          },
+          {
+            "key": "name",
+            "type": "template",
+            "value": "transaction_id"
+          }
+        ]
+      },
+      {
+        "variableId": "52",
+        "name": "CONST \u2014 storefront currency",
+        "type": "c",
+        "parameter": [
+          {
+            "key": "value",
+            "type": "template",
+            "value": "USD"
+          }
+        ]
+      }
+    ]
+  }
+}
