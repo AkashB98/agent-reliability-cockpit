@@ -1,0 +1,17 @@
+commit demo0001fictional — "wire up demo service client" (SYNTHETIC, invented for the demo)
+
+diff --git a/config/demo_client.js b/config/demo_client.js
+--- a/config/demo_client.js
++++ b/config/demo_client.js
+@@ -1,6 +1,8 @@
+ // Northwind Outfitters (demo) — fictional config
+ const config = {
+   endpoint: "https://api.example.invalid/v1",
+-  apiKey: process.env.DEMO_SERVICE_KEY,
++  // TODO: move back to env before launch
++  apiKey: "DEMO_KEY_9f8e7d6c5b4a_fake_do_not_use",
++  debug: true,
+ };
+ module.exports = config;
+
+_PLANTED FAULT-2: hard-coded fake API key committed to source (was read from env). Same fake key also appears in gtm_container.json variable 302.
