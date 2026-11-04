@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Reliability Cockpit — Audit Report (demo-dataset-v2-holdout)</title>
+<style>
+  body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+         margin: 0; background: #f6f7f9; color: #1a1a2e; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 28px 18px 40px; }
+  header { background: #16213e; color: #fff; border-radius: 12px; padding: 22px 24px; }
+  header h1 { margin: 0 0 4px; font-size: 24px; }
+  header .sub { color: #b8c4de; font-size: 14px; }
+  .score { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 14px; }
+  .score div { background: #0f3460; border-radius: 8px; padding: 8px 14px; font-size: 14px; }
+  .score b { font-size: 18px; }
+  h2 { margin: 26px 0 10px; font-size: 17px; }
+  .card { border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: #fff; }
+  .card-top { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 12.5px; }
+  .sev { color: #fff; font-weight: 700; padding: 2px 9px; border-radius: 20px; }
+  .tag { font-weight: 700; }
+  .loc { color: #555; font-family: ui-monospace, Menlo, Consolas, monospace; }
+  .card h3 { margin: 10px 0 6px; font-size: 16.5px; }
+  .detail { margin: 4px 0; color: #333; font-size: 14.5px; }
+  .fix { margin: 8px 0 0; font-size: 14.5px; }
+  .impact { margin: 8px 0 0; font-size: 14.5px; background: #fff8e1; border-radius: 6px; padding: 8px 10px; }
+  .impact-total { margin-top: 14px; background: #7b1f1f; border-radius: 8px; padding: 10px 14px; font-size: 14.5px; }
+  .calib { margin-top: 22px; font-size: 13px; color: #555; border: 1px dashed #bbb; border-radius: 8px; padding: 10px 14px; background: #fff; }
+  .gate { display: flex; justify-content: space-between; align-items: center; gap: 10px;
+          flex-wrap: wrap; margin-top: 12px; padding-top: 10px; border-top: 1px dashed #bbb; }
+  .gate-state { font-weight: 700; font-size: 13.5px; color: #7a3b00; }
+  .btn { display: inline-block; padding: 5px 14px; border-radius: 6px; font-size: 13px;
+         font-weight: 700; margin-left: 6px; opacity: .55; }
+  .approve { background: #2e7d32; color: #fff; }
+  .reject { background: #eceff1; color: #37474f; border: 1px solid #90a4ae; }
+  footer { margin-top: 28px; font-size: 13px; color: #555; border-top: 1px solid #ddd; padding-top: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Agent Reliability Cockpit — Audit Report</h1>
+    <div class="sub">Dataset: demo-dataset-v2-holdout (synthetic) · Audited by muse-spark-1.1 via the Meta Model API · Run 2026-10-31T14:01:00+00:00</div>
+    <div class="score">
+      <div>Score <b>5/5</b></div>
+      <div>Pass bar <b>Model catches &gt;=4 of 5 faults on data it has never seen, in one batched call, under the same recipe and budget discipline as v1.</b></div>
+      <div>Faults caught <b>5/5</b></div>
+      <div>Tokens <b>42648 in · 3807 out · 1912 reasoning</b></div>
+      <div>Run cost <b>$0.0695</b></div>
+    </div>
+    <div class="impact-total"><strong>Total quantified impact:</strong> revenue overstated +$184.50 · 1 live token public · €184.50 double-charged (1 customer) · 1 customer record exposed — every figure computed from the data itself, not estimated by the model.</div>
+  </header>
+
+  <h2>Findings — every fix stops at my approval gate. Nothing below has been applied.</h2>
+  
+    <article class="card" style="border-left:8px solid #c62828;background:#fdecea">
+      <div class="card-top">
+        <span class="sev" style="background:#c62828">HIGH</span>
+        <span class="tag">FAULT-V2-1</span>
+        <span class="loc">ga4_events.json → events[5] · purchase (2026-10-22T18:24:05Z), transaction_id FF-2026-88412</span>
+      </div>
+      <h3>Wrong currency on revenue — Currency mismatch: Purchase currency USD does not match funnel currency EUR for transaction FF-2026-88412.</h3>
+      <p class="detail">The purchase events report currency &#x27;USD&#x27; with value 184.50, but the whole funnel ran in EUR — every other event uses currency EUR and the items were priced at EUR 92.25 x 2. Revenue for this order is recorded in the wrong currency and overstated roughly 16%.</p>
+      <p class="impact"><strong>💥 Impact:</strong> Revenue mis-stated: this €184.50 order is booked as $184.50 — 100% of the order&#x27;s revenue lands in the wrong currency (USD vs the EUR funnel), so every blended revenue and ROAS report that includes it is off by the full EUR–USD gap — the ground-truth analysis of this planted fault puts the overstatement at ≈16% on this order.</p>
+      <p class="fix"><strong>Proposed fix:</strong> Set purchase currency to EUR to match funnel.</p>
+      <div class="gate">
+        <span class="gate-state">⛔ Approval gate: REQUIRES APPROVAL — nothing applied yet</span>
+        <span class="gate-btns"><span class="btn approve">APPROVE</span><span class="btn reject">REJECT</span></span>
+      </div>
+    </article>
+
+    <article class="card" style="border-left:8px solid #c62828;background:#fdecea">
+      <div class="card-top">
+        <span class="sev" style="background:#c62828">HIGH</span>
+        <span class="tag">FAULT-V2-2</span>
+        <span class="loc">ga4_events.json → events[5] and events[6] · same transaction_id FF-2026-88412</span>
+      </div>
+      <h3>Same purchase counted twice — Duplicate event: Transaction FF-2026-88412 recorded twice, purchase counted two times at 18:24:05 and 18:24:08.</h3>
+      <p class="detail">The identical purchase event — same transaction_id FF-2026-88412, same items, same value — is recorded twice, 3 seconds apart (18:24:05Z and 18:24:08Z). A double-fired tag records one order as two purchases and doubles reported revenue.</p>
+      <p class="impact"><strong>💥 Impact:</strong> Revenue overstated by $184.50: order FF-2026-88412 is counted 2 times — $369.00 reported against $184.50 real (+100% on this order). Every ROAS figure fed by this property inherits the inflation.</p>
+      <p class="fix"><strong>Proposed fix:</strong> Deduplicate to single purchase event per transaction_id.</p>
+      <div class="gate">
+        <span class="gate-state">⛔ Approval gate: REQUIRES APPROVAL — nothing applied yet</span>
+        <span class="gate-btns"><span class="btn approve">APPROVE</span><span class="btn reject">REJECT</span></span>
+      </div>
+    </article>
+
+    <article class="card" style="border-left:8px solid #b00020;background:#fdecea">
+      <div class="card-top">
+        <span class="sev" style="background:#b00020">CRITICAL</span>
+        <span class="tag">FAULT-V2-3</span>
+        <span class="loc">gtm_container.json → containerVersion.tag[2] · tagId 13 &#x27;Loyalty Points — Sync (custom HTML)&#x27;</span>
+      </div>
+      <h3>Secret hidden in code — Obfuscated secret: Base64 blob contains live API token FF_TOKEN shipped in custom HTML tag to browsers.</h3>
+      <p class="detail">A live API token is hidden inside the Loyalty Points custom HTML tag: a base64 blob decoded with atob() at runtime holds {ff_api_token: FF_TOKEN_f4k3...}. Encoding is not protection — anyone who can view the container can decode it in seconds, and the token ships to every visitor&#x27;s browser.</p>
+      <p class="impact"><strong>💥 Impact:</strong> Exposure: 1 live API token shipped to every visitor&#x27;s browser inside tag &#x27;Loyalty Points — Sync (custom HTML)&#x27;. The base64 blob decodes to a working token (verified by decoding it here) — encoding is not protection, and the token must be treated as public.</p>
+      <p class="fix"><strong>Proposed fix:</strong> Remove token from GTM HTML and load from server secret store.</p>
+      <div class="gate">
+        <span class="gate-state">⛔ Approval gate: REQUIRES APPROVAL — nothing applied yet</span>
+        <span class="gate-btns"><span class="btn approve">APPROVE</span><span class="btn reject">REJECT</span></span>
+      </div>
+    </article>
+
+    <article class="card" style="border-left:8px solid #b00020;background:#fdecea">
+      <div class="card-top">
+        <span class="sev" style="background:#b00020">CRITICAL</span>
+        <span class="tag">FAULT-V2-4</span>
+        <span class="loc">tool_trace.jsonl → record 2 · t-102 (payments.charge_card)</span>
+      </div>
+      <h3>Customer charged twice — Missing idempotency: payments.charge_card retried with null idempotency_key, settled two charges ch_ff_881 and ch_ff_882.</h3>
+      <p class="detail">payments.charge_card ran with idempotency_key null. When the first attempt timed out at the gateway, the client retried and the customer was charged twice: two settled charges (ch_ff_881, ch_ff_882) of 18450 cents each for one order — a real double charge, not just double data.</p>
+      <p class="impact"><strong>💥 Impact:</strong> Customers double-charged: 1 — the gateway retry settled 2 charges of €184.50 for a single order, so €184.50 was taken from the customer that should not exist, plus the refund and chargeback handling it triggers.</p>
+      <p class="fix"><strong>Proposed fix:</strong> Require idempotency_key for charge_card and block retry without it.</p>
+      <div class="gate">
+        <span class="gate-state">⛔ Approval gate: REQUIRES APPROVAL — nothing applied yet</span>
+        <span class="gate-btns"><span class="btn approve">APPROVE</span><span class="btn reject">REJECT</span></span>
+      </div>
+    </article>
+
+    <article class="card" style="border-left:8px solid #c62828;background:#fdecea">
+      <div class="card-top">
+        <span class="sev" style="background:#c62828">HIGH</span>
+        <span class="tag">FAULT-V2-5</span>
+        <span class="loc">tool_trace.jsonl → record 3 · t-103 (shipping.create_label)</span>
+      </div>
+      <h3>Private data in tool input — PII exposure: shipping.create_label input logs name, street address, city and card fragment for customer.</h3>
+      <p class="detail">A customer&#x27;s full shipping address (invented name + street + city/ZIP) and a saved-card fragment (&#x27;card ending 4417&#x27;) sit in the INPUT of the shipping.create_label call, so they are stored in the trace log in plain text. Inputs get logged just like outputs — this trace now holds personal and payment data.</p>
+      <p class="impact"><strong>💥 Impact:</strong> Exposure: 1 customer&#x27;s data written into a stored trace log — 4 items (name, street address, city/ZIP, saved-card fragment). Inputs are logged just like outputs, so the log itself becomes the leak.</p>
+      <p class="fix"><strong>Proposed fix:</strong> Redact PII from trace logs and store only order_ref.</p>
+      <div class="gate">
+        <span class="gate-state">⛔ Approval gate: REQUIRES APPROVAL — nothing applied yet</span>
+        <span class="gate-btns"><span class="btn approve">APPROVE</span><span class="btn reject">REJECT</span></span>
+      </div>
+    </article>
+
+  
+
+  <footer>
+    Approval gate: every proposed fix above returned <b>require_approval</b> from my gate —
+    the Cockpit proposes, I decide, only then does anything change.
+    Cumulative hackathon spend: <b>$0.7114 of the $150 credit</b>.
+    Report generated locally from the run record — rendering cost $0.
+  </footer>
+</div>
+</body>
+</html>
