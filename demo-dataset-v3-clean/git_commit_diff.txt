@@ -1,0 +1,18 @@
+commit demo0002fictional — "read demo service key from env, add config test" (SYNTHETIC, invented for the demo)
+
+diff --git a/config/demo_client.js b/config/demo_client.js
+--- a/config/demo_client.js
++++ b/config/demo_client.js
+@@ -1,6 +1,9 @@
+ // Northwind Outfitters (demo) — fictional config
++// The service key is NEVER stored in source. It is injected at runtime
++// from the DEMO_SERVICE_KEY environment variable (secret storage).
+ const config = {
+   endpoint: "https://api.example.invalid/v1",
+   apiKey: process.env.DEMO_SERVICE_KEY,
++  keySource: "env:DEMO_SERVICE_KEY",
+ };
+ module.exports = config;
++
++// NOTE for reviewers: no credential value appears in this commit — only
++// the NAME of the environment variable that supplies it at runtime.
