@@ -1,0 +1,58 @@
+{
+  "run": "meta-audit",
+  "timestamp": "2026-10-26T20:51:53+00:00",
+  "model": "muse-spark-1.1",
+  "status": "no_findings_returned",
+  "attempts": [
+    {
+      "max_tokens": 1500,
+      "transport": "subprocess via meta_audit.py",
+      "result": "failed before any response: urllib/http.client traceback inside meta_api.py after ~60s (connector socket timeout); no response received, no usage reported"
+    },
+    {
+      "max_tokens": 2500,
+      "transport": "direct meta_api.py call (the allowed single retry)",
+      "http_status": 200,
+      "usage": {
+        "completion_tokens": 2500,
+        "prompt_tokens": 1571,
+        "total_tokens": 4071,
+        "completion_tokens_details": {
+          "reasoning_tokens": 2498
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "finish_reason": "length",
+      "content_returned": false
+    }
+  ],
+  "usage": {
+    "completion_tokens": 2500,
+    "prompt_tokens": 1571,
+    "total_tokens": 4071,
+    "completion_tokens_details": {
+      "reasoning_tokens": 2498
+    },
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "estimated_cost_usd": 0.012589,
+  "cost_note": "Cost of the completed (HTTP 200) call only. Attempt 1 returned no response and reported no usage; if it was billed at all it is unobservable from here and bounded by ~$0.009 at the 1500 cap.",
+  "model_findings": [],
+  "mapping": {},
+  "score": {
+    "caught": [],
+    "missed": [
+      "FAULT-1",
+      "FAULT-2",
+      "FAULT-3",
+      "FAULT-4"
+    ],
+    "model_audit": "0/4",
+    "local_pipeline": "4/4"
+  },
+  "diagnosis": "muse-spark-1.1 spent 2498 of 2500 completion tokens on reasoning and hit the length cap (finish_reason=length) before emitting any answer content. Same failure shape as muse-spark-1.3 in Step 0 testing, just slower to surface: on a real audit prompt the reasoning trace outgrows the whole budget. Raising max-tokens is not the fix on its own; Day 2 investigates a reasoning-effort control / response shaping before any further audit call."
+}
