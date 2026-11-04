@@ -1,0 +1,604 @@
+{
+  "run": "agentic-loop-v2-holdout",
+  "run_suffix": "holdout-04",
+  "post_hoc_disclosure": null,
+  "timestamp": "2026-10-31T14:00:48+00:00",
+  "model": "muse-spark-1.1",
+  "mode": "agentic tool-calling loop (chat/completions, streamed)",
+  "recipe": {
+    "max_completion_tokens": 12000,
+    "reasoning_effort": "low",
+    "step_cap_tool_calls": 24,
+    "run_budget_usd": 0.25
+  },
+  "status": "findings submitted via render_report",
+  "api_calls": [
+    {
+      "http_status": 200,
+      "usage": {
+        "completion_tokens": 504,
+        "prompt_tokens": 2561,
+        "total_tokens": 3065,
+        "completion_tokens_details": {
+          "reasoning_tokens": 133
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 2545
+        }
+      },
+      "reasoning_tokens": 133,
+      "finish_reason": "tool_calls",
+      "estimated_cost_usd": 0.005343,
+      "error": null
+    },
+    {
+      "http_status": 200,
+      "usage": {
+        "completion_tokens": 399,
+        "prompt_tokens": 3666,
+        "total_tokens": 4065,
+        "completion_tokens_details": {
+          "reasoning_tokens": 160
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 2545
+        }
+      },
+      "reasoning_tokens": 160,
+      "finish_reason": "tool_calls",
+      "estimated_cost_usd": 0.006278,
+      "error": null
+    },
+    {
+      "http_status": 200,
+      "usage": {
+        "completion_tokens": 907,
+        "prompt_tokens": 7919,
+        "total_tokens": 8826,
+        "completion_tokens_details": {
+          "reasoning_tokens": 255
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 3569
+        }
+      },
+      "reasoning_tokens": 255,
+      "finish_reason": "tool_calls",
+      "estimated_cost_usd": 0.013754,
+      "error": null
+    },
+    {
+      "http_status": 200,
+      "usage": {
+        "completion_tokens": 873,
+        "prompt_tokens": 9599,
+        "total_tokens": 10472,
+        "completion_tokens_details": {
+          "reasoning_tokens": 414
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 7793
+        }
+      },
+      "reasoning_tokens": 414,
+      "finish_reason": "tool_calls",
+      "estimated_cost_usd": 0.015709,
+      "error": null
+    }
+  ],
+  "usage_successful_call": {
+    "prompt_tokens": 23745,
+    "completion_tokens": 2683,
+    "completion_tokens_details": {
+      "reasoning_tokens": 962
+    }
+  },
+  "totals_all_attempts": {
+    "prompt_tokens": 23745,
+    "completion_tokens": 2683,
+    "reasoning_tokens": 962
+  },
+  "estimated_cost_usd": 0.041084,
+  "cumulative_hackathon_usd": 0.641861,
+  "tool_log": [
+    {
+      "step": 1,
+      "tool": "validate_events",
+      "args": {},
+      "result": {
+        "events_checked": 8,
+        "purchase_events": 2,
+        "anomalies": [
+          {
+            "event_index": 5,
+            "problem": "purchase currency USD does not match the funnel currency EUR"
+          },
+          {
+            "event_index": 6,
+            "problem": "purchase currency USD does not match the funnel currency EUR"
+          },
+          {
+            "event_indexes": [
+              5,
+              6
+            ],
+            "problem": "transaction_id FF-2026-88412 is recorded 2 times \u2014 the same purchase counted more than once"
+          }
+        ]
+      }
+    },
+    {
+      "step": 2,
+      "tool": "replay_trace",
+      "args": {},
+      "result": {
+        "calls_checked": 4,
+        "flagged": 1,
+        "calls": [
+          {
+            "call": "t-101",
+            "tool": "inventory.check_stock",
+            "verdict": "replayable",
+            "reasons": []
+          },
+          {
+            "call": "t-102",
+            "tool": "payments.charge_card",
+            "verdict": "UNREPLAYABLE/UNSAFE",
+            "reasons": [
+              "RETRY-UNSAFE: 2 settled charges on one call and idempotency_key is null \u2014 a gateway retry repeated the charge; replaying this call repeats the side effect"
+            ]
+          },
+          {
+            "call": "t-103",
+            "tool": "shipping.create_label",
+            "verdict": "replayable",
+            "reasons": []
+          },
+          {
+            "call": "t-104",
+            "tool": "reports.weekly_rollup",
+            "verdict": "replayable",
+            "reasons": []
+          }
+        ]
+      }
+    },
+    {
+      "step": 3,
+      "tool": "scrub_pii",
+      "args": {
+        "file": "tool_trace.jsonl"
+      },
+      "result": {
+        "file": "tool_trace.jsonl",
+        "changed": false,
+        "pii_findings": [],
+        "note": "counts and categories only \u2014 raw values never leave the machine; the redacted text is the only version that may be stored or shown"
+      }
+    },
+    {
+      "step": 4,
+      "tool": "scan_secrets",
+      "args": {
+        "file": "ga4_events.json"
+      },
+      "result": {
+        "file": "ga4_events.json",
+        "findings": [],
+        "active_findings": 0,
+        "allowlisted": 0,
+        "suppressed": 0,
+        "scanner_exit_code": 0
+      }
+    },
+    {
+      "step": 5,
+      "tool": "scan_secrets",
+      "args": {
+        "file": "gtm_container.json"
+      },
+      "result": {
+        "file": "gtm_container.json",
+        "findings": [
+          {
+            "detector": "ENT-SECRET-CTX",
+            "kind": "entropy_secret",
+            "severity": "high",
+            "line": 10
+          },
+          {
+            "detector": "ENT-SECRET",
+            "kind": "entropy_secret",
+            "severity": "high",
+            "line": 51
+          }
+        ],
+        "active_findings": 2,
+        "allowlisted": 0,
+        "suppressed": 0,
+        "scanner_exit_code": 2
+      }
+    },
+    {
+      "step": 6,
+      "tool": "scan_secrets",
+      "args": {
+        "file": "tool_trace.jsonl"
+      },
+      "result": {
+        "file": "tool_trace.jsonl",
+        "findings": [],
+        "active_findings": 0,
+        "allowlisted": 0,
+        "suppressed": 0,
+        "scanner_exit_code": 0
+      }
+    },
+    {
+      "step": 7,
+      "tool": "scan_secrets",
+      "args": {
+        "file": "git_commit_diff.txt"
+      },
+      "result": {
+        "file": "git_commit_diff.txt",
+        "findings": [],
+        "active_findings": 0,
+        "allowlisted": 0,
+        "suppressed": 0,
+        "scanner_exit_code": 0
+      }
+    },
+    {
+      "step": 8,
+      "tool": "read_file",
+      "args": {
+        "file": "ga4_events.json"
+      },
+      "result": {
+        "file": "ga4_events.json",
+        "content_numbered": "   1| {\n   2|  \"client\": \"web \\u00b7 gtag.js\",\n   3|  \"events\": [\n   4|   {\n   5|    \"name\": \"session_start\",\n   6|    \"params\": {\n   7|     \"engagement_time_msec\": 100\n   8|    },\n   9|    \"ts\": \"2026-10-22T18:11:02Z\"\n  10|   },\n  11|   {\n  12|    \"name\": \"page_view\",\n  13|    \"params\": {\n  14|     \"page_location\": \"https://shop.example.invalid/collections/stoneware\",\n  15|     \"page_title\": \"Stoneware & Serveware\"\n  16|    },\n  17|    \"ts\": \"2026-10-22T18:11:04Z\"\n  18|   },\n  19|   {\n  20|    \"name\": \"view_item\",\n  21|    \"params\": {\n  22|     \"currency\": \"EUR\",\n  23|     \"items\": [\n  24|      {\n  25|       \"item_id\": \"FF-BOWL-220\",\n  26|       \"item_name\": \"Fern Serving Bowl \\u2014 Large\",\n  27|       \"price\": 92.25,\n  28|       \"quantity\": 2\n  29|      }\n  30|     ],\n  31|     \"value\": 184.5\n  32|    },\n  33|    \"ts\": \"2026-10-22T18:13:47Z\"\n  34|   },\n  35|   {\n  36|    \"name\": \"add_to_cart\",\n  37|    \"params\": {\n  38|     \"currency\": \"EUR\",\n  39|     \"items\": [\n  40|      {\n  41|       \"item_id\": \"FF-BOWL-220\",\n  42|       \"item_name\": \"Fern Serving Bowl \\u2014 Large\",\n  43|       \"price\": 92.25,\n  44|       \"quantity\": 2\n  45|      }\n  46|     ],\n  47|     \"value\": 184.5\n  48|    },\n  49|    \"ts\": \"2026-10-22T18:15:19Z\"\n  50|   },\n  51|   {\n  52|    \"name\": \"begin_checkout\",\n  53|    \"params\": {\n  54|     \"currency\": \"EUR\",\n  55|     \"items\": [\n  56|      {\n  57|       \"item_id\": \"FF-BOWL-220\",\n  58|       \"item_name\": \"Fern Serving Bowl \\u2014 Large\",\n  59|       \"price\": 92.25,\n  60|       \"quantity\": 2\n  61|      }\n  62|     ],\n  63|     \"value\": 184.5\n  64|    },\n  65|    \"ts\": \"2026-10-22T18:21:56Z\"\n  66|   },\n  67|   {\n  68|    \"name\": \"purchase\",\n  69|    \"params\": {\n  70|     \"currency\": \"USD\",\n  71|     \"items\": [\n  72|      {\n  73|       \"item_id\": \"FF-BOWL-220\",\n  74|       \"item_name\": \"Fern Serving Bowl \\u2014 Large\",\n  75|       \"price\": 92.25,\n  76|       \"quantity\": 2\n  77|      }\n  78|     ],\n  79|     \"tax\": 0,\n  80|     \"transaction_id\": \"FF-2026-88412\",\n  81|     \"value\": 184.5\n  82|    },\n  83|    \"ts\": \"2026-10-22T18:24:05Z\"\n  84|   },\n  85|   {\n  86|    \"name\": \"purchase\",\n  87|    \"params\": {\n  88|     \"currency\": \"USD\",\n  89|     \"items\": [\n  90|      {\n  91|       \"item_id\": \"FF-BOWL-220\",\n  92|       \"item_name\": \"Fern Serving Bowl \\u2014 Large\",\n  93|       \"price\": 92.25,\n  94|       \"quantity\": 2\n  95|      }\n  96|     ],\n  97|     \"tax\": 0,\n  98|     \"transaction_id\": \"FF-2026-88412\",\n  99|     \"value\": 184.5\n 100|    },\n 101|    \"ts\": \"2026-10-22T18:24:08Z\"\n 102|   },\n 103|   {\n 104|    \"name\": \"refund\",\n 105|    \"params\": {\n 106|     \"currency\": \"EUR\",\n 107|     \"items\": [\n 108|      {\n 109|       \"item_id\": \"FF-MUG-114\",\n 110|       \"item_name\": \"Fable Mug \\u2014 Set of 2\",\n 111|       \"price\": 46.0,\n 112|       \"quantity\": 1\n 113|      }\n 114|     ],\n 115|     \"transaction_id\": \"FF-2026-88397\",\n 116|     \"value\": 46.0\n 117|    },\n 118|    \"ts\": \"2026-10-23T09:02:31Z\"\n 119|   }\n 120|  ],\n 121|  \"measurement_id\": \"G-FFABLE0000\",\n 122|  \"stream\": \"Fern & Fable Home Goods \\u2014 web (SYNTHETIC)\"\n 123| }"
+      }
+    },
+    {
+      "step": 9,
+      "tool": "read_file",
+      "args": {
+        "file": "gtm_container.json"
+      },
+      "result": {
+        "file": "gtm_container.json",
+        "content_numbered": "   1| {\n   2|  \"containerVersion\": {\n   3|   \"container\": {\n   4|    \"name\": \"Fern & Fable \\u2014 web (SYNTHETIC)\",\n   5|    \"publicId\": \"GTM-FF00000\",\n   6|    \"usageContext\": [\n   7|     \"web\"\n   8|    ]\n   9|   },\n  10|   \"path\": \"accounts/0000000/containers/FF000000/versions/14\",\n  11|   \"tag\": [\n  12|    {\n  13|     \"firingTriggerId\": [\n  14|      \"2147479553\"\n  15|     ],\n  16|     \"name\": \"GA4 \\u2014 Configuration\",\n  17|     \"parameter\": [\n  18|      {\n  19|       \"key\": \"measurementId\",\n  20|       \"type\": \"template\",\n  21|       \"value\": \"G-FFABLE0000\"\n  22|      }\n  23|     ],\n  24|     \"tagId\": \"11\",\n  25|     \"type\": \"gaawe\"\n  26|    },\n  27|    {\n  28|     \"firingTriggerId\": [\n  29|      \"30\"\n  30|     ],\n  31|     \"name\": \"GA4 \\u2014 purchase\",\n  32|     \"parameter\": [\n  33|      {\n  34|       \"key\": \"eventName\",\n  35|       \"type\": \"template\",\n  36|       \"value\": \"purchase\"\n  37|      }\n  38|     ],\n  39|     \"tagId\": \"12\",\n  40|     \"type\": \"gaawe\"\n  41|    },\n  42|    {\n  43|     \"firingTriggerId\": [\n  44|      \"30\"\n  45|     ],\n  46|     \"name\": \"Loyalty Points \\u2014 Sync (custom HTML)\",\n  47|     \"parameter\": [\n  48|      {\n  49|       \"key\": \"html\",\n  50|       \"type\": \"template\",\n  51|       \"value\": \"<script>\\n  // loyalty sync \\u2014 config ships encoded so it is not sitting in plain sight\\n  var _ffcfg = JSON.parse(atob('eyJmZl9hcGlfdG9rZW4iOiJGRl9UT0tFTl9mNGszX2QwX24wdF91czNfOTk4ODc3In0='));\\n  fetch('https://loyalty.example.invalid/v2/sync', {\\n    method: 'POST',\\n    headers: { 'Authorization': 'Bearer ' + _ffcfg.ff_api_token }\\n  });\\n</script>\"\n  52|      }\n  53|     ],\n  54|     \"tagId\": \"13\",\n  55|     \"type\": \"html\"\n  56|    }\n  57|   ],\n  58|   \"trigger\": [\n  59|    {\n  60|     \"name\": \"Initialization \\u2014 All Pages\",\n  61|     \"triggerId\": \"2147479553\",\n  62|     \"type\": \"init\"\n  63|    },\n  64|    {\n  65|     \"customEventFilter\": [\n  66|      {\n  67|       \"parameter\": [\n  68|        {\n  69|         \"key\": \"arg0\",\n  70|         \"type\": \"template\",\n  71|         \"value\": \"{{_event}}\"\n  72|        },\n  73|        {\n  74|         \"key\": \"arg1\",\n  75|         \"type\": \"template\",\n  76|         \"value\": \"purchase\"\n  77|        }\n  78|       ],\n  79|       \"type\": \"equals\"\n  80|      }\n  81|     ],\n  82|     \"name\": \"DL \\u2014 purchase complete\",\n  83|     \"triggerId\": \"30\",\n  84|     \"type\": \"custom_event\"\n  85|    }\n  86|   ],\n  87|   \"variable\": [\n  88|    {\n  89|     \"name\": \"DLV \\u2014 transactionId\",\n  90|     \"parameter\": [\n  91|      {\n  92|       \"key\": \"dataLayerVersion\",\n  93|       \"type\": \"integer\",\n  94|       \"value\": \"2\"\n  95|      },\n  96|      {\n  97|       \"key\": \"name\",\n  98|       \"type\": \"template\",\n  99|       \"value\": \"transaction_id\"\n 100|      }\n 101|     ],\n 102|     \"type\": \"v\",\n 103|     \"variableId\": \"41\"\n 104|    },\n 105|    {\n 106|     \"name\": \"CONST \\u2014 storefront region\",\n 107|     \"parameter\": [\n 108|      {\n 109|       \"key\": \"value\",\n 110|       \"type\": \"template\",\n 111|       \"value\": \"eu-west\"\n 112|      }\n 113|     ],\n 114|     \"type\": \"c\",\n 115|     \"variableId\": \"42\"\n 116|    }\n 117|   ]\n 118|  },\n 119|  \"exportFormatVersion\": 2\n 120| }"
+      }
+    },
+    {
+      "step": 10,
+      "tool": "read_file",
+      "args": {
+        "file": "tool_trace.jsonl"
+      },
+      "result": {
+        "file": "tool_trace.jsonl",
+        "content_numbered": "   1| {\"call\": \"t-101\", \"tool_name\": \"inventory.check_stock\", \"recorded_at\": \"2026-10-22T18:20:11Z\", \"input\": {\"sku\": \"FF-BOWL-220\", \"warehouse\": \"eu-west-1\"}, \"result\": {\"on_hand\": 34, \"reserved\": 2}, \"replay\": \"supported\"}\n   2| {\"call\": \"t-102\", \"tool_name\": \"payments.charge_card\", \"recorded_at\": \"2026-10-22T18:24:06Z\", \"input\": {\"order_ref\": \"FF-2026-88412\", \"amount_cents\": 18450, \"currency\": \"EUR\", \"idempotency_key\": null, \"card_token\": \"tok_ff_demo_5521\"}, \"result\": {\"status\": \"settled\", \"charges\": [{\"charge_id\": \"ch_ff_881\", \"amount_cents\": 18450}, {\"charge_id\": \"ch_ff_882\", \"amount_cents\": 18450}], \"note\": \"first attempt timed out at the gateway; the client retried the charge\"}, \"replay\": \"supported\"}\n   3| {\"call\": \"t-103\", \"tool_name\": \"shipping.create_label\", \"recorded_at\": \"2026-10-22T18:31:44Z\", \"input\": {\"order_ref\": \"FF-2026-88412\", \"ship_to\": {\"name\": \"Marta Ellison (fictional)\", \"street\": \"4812 Willow Bend Ln\", \"city\": \"Austin, TX 78704\"}, \"billing_note\": \"settled on saved card ending 4417\"}, \"result\": {\"label_id\": \"lbl_ff_2291\", \"carrier\": \"demo-post\"}, \"replay\": \"supported\"}\n   4| {\"call\": \"t-104\", \"tool_name\": \"reports.weekly_rollup\", \"recorded_at\": \"2026-10-23T06:00:00Z\", \"input\": {\"week_ending\": \"2026-10-25\", \"property\": \"G-FFABLE0000\"}, \"result\": {\"sessions\": 12044, \"orders\": 311}, \"replay\": \"supported\"}"
+      }
+    },
+    {
+      "step": 11,
+      "tool": "read_file",
+      "args": {
+        "file": "git_commit_diff.txt"
+      },
+      "result": {
+        "file": "git_commit_diff.txt",
+        "content_numbered": "   1| commit ff29c41d8a2e \u2014 \"harden the fern sync worker retries\" (SYNTHETIC, invented for the demo)\n   2| \n   3| diff --git a/workers/fern_sync.py b/workers/fern_sync.py\n   4| --- a/workers/fern_sync.py\n   5| +++ b/workers/fern_sync.py\n   6| @@ -8,14 +8,20 @@ import os\n   7|  import time\n   8|  \n   9|  import requests\n  10|  \n  11| -API_TOKEN = os.environ[\"FF_API_TOKEN\"]\n  12| +API_TOKEN = os.environ[\"FF_API_TOKEN\"]  # provided by the deploy environment\n  13|  BASE_URL = \"https://sync.example.invalid/v2\"\n  14| -RETRY_LIMIT = 2\n  15| +RETRY_LIMIT = 4\n  16| +BACKOFF_SECONDS = 1.5\n  17|  \n  18|  \n  19|  def push_batch(records):\n  20|      headers = {\"Authorization\": f\"Bearer {API_TOKEN}\"}\n  21| -    for attempt in range(RETRY_LIMIT):\n  22| +    for attempt in range(RETRY_LIMIT + 1):\n  23|          try:\n  24|              resp = requests.post(BASE_URL + \"/orders\", json=records,\n  25|                                   headers=headers, timeout=10)\n  26|              resp.raise_for_status()\n  27|              return resp.json()\n  28|          except requests.RequestException:\n  29| -            time.sleep(1)\n  30| +            if attempt == RETRY_LIMIT:\n  31| +                raise\n  32| +            time.sleep(BACKOFF_SECONDS * (attempt + 1))\n  33|      return None"
+      }
+    },
+    {
+      "step": 12,
+      "tool": "compute_impacts",
+      "args": {},
+      "result": {
+        "totals": [
+          "revenue overstated +$184.50",
+          "1 live token public",
+          "\u20ac184.50 double-charged (1 customer)",
+          "1 customer record exposed"
+        ],
+        "impacts_by_fault_ref": {
+          "FAULT-V2-1": "Revenue mis-stated: this \u20ac184.50 order is booked as $184.50 \u2014 100% of the order's revenue lands in the wrong currency (USD vs the EUR funnel), so every blended revenue and ROAS report that includes it is off by the full EUR\u2013USD gap \u2014 the ground-truth analysis of this planted fault puts the overstatement at \u224816% on this order.",
+          "FAULT-V2-2": "Revenue overstated by $184.50: order FF-2026-88412 is counted 2 times \u2014 $369.00 reported against $184.50 real (+100% on this order). Every ROAS figure fed by this property inherits the inflation.",
+          "FAULT-V2-3": "Exposure: 1 live API token shipped to every visitor's browser inside tag 'Loyalty Points \u2014 Sync (custom HTML)'. The base64 blob decodes to a working token (verified by decoding it here) \u2014 encoding is not protection, and the token must be treated as public.",
+          "FAULT-V2-4": "Customers double-charged: 1 \u2014 the gateway retry settled 2 charges of \u20ac184.50 for a single order, so \u20ac184.50 was taken from the customer that should not exist, plus the refund and chargeback handling it triggers.",
+          "FAULT-V2-5": "Exposure: 1 customer's data written into a stored trace log \u2014 4 items (name, street address, city/ZIP, saved-card fragment). Inputs are logged just like outputs, so the log itself becomes the leak."
+        },
+        "note": "every figure computed from the dataset files by code \u2014 attach these to the findings you identified; invent none"
+      }
+    },
+    {
+      "step": 13,
+      "tool": "propose_fix",
+      "args": {
+        "fault_ref": "currency-mismatch-purchase",
+        "target_file": "ga4_events.json",
+        "change": "Change purchase event currency from USD to EUR to match funnel.",
+        "irreversible": false
+      },
+      "result": {
+        "verdict": "BLOCKED",
+        "gate_action": "require_approval",
+        "gate_rule": "policy-default",
+        "reason": "policy default: every fix requires human approval",
+        "applied": false,
+        "proposed_change": "Change purchase event currency from USD to EUR to match funnel.",
+        "note": "the gate decides; nothing is applied by this tool, ever"
+      }
+    },
+    {
+      "step": 14,
+      "tool": "propose_fix",
+      "args": {
+        "fault_ref": "duplicate-purchase",
+        "target_file": "ga4_events.json",
+        "change": "Deduplicate purchase events, keep only one record per transaction_id FF-2026-88412.",
+        "irreversible": false
+      },
+      "result": {
+        "verdict": "BLOCKED",
+        "gate_action": "require_approval",
+        "gate_rule": "policy-default",
+        "reason": "policy default: every fix requires human approval",
+        "applied": false,
+        "proposed_change": "Deduplicate purchase events, keep only one record per transaction_id FF-2026-88412.",
+        "note": "the gate decides; nothing is applied by this tool, ever"
+      }
+    },
+    {
+      "step": 15,
+      "tool": "propose_fix",
+      "args": {
+        "fault_ref": "obfuscated-secret-gtm",
+        "target_file": "gtm_container.json",
+        "change": "Remove encoded API token from custom HTML tag and load token from server-side secret store.",
+        "irreversible": false
+      },
+      "result": {
+        "verdict": "BLOCKED",
+        "gate_action": "require_approval",
+        "gate_rule": "policy-default",
+        "reason": "policy default: every fix requires human approval",
+        "applied": false,
+        "proposed_change": "Remove encoded API token from custom HTML tag and load token from server-side secret store.",
+        "note": "the gate decides; nothing is applied by this tool, ever"
+      }
+    },
+    {
+      "step": 16,
+      "tool": "propose_fix",
+      "args": {
+        "fault_ref": "missing-idempotency-charge",
+        "target_file": "tool_trace.jsonl",
+        "change": "Add idempotency_key to payments.charge_card calls to prevent duplicate charges on retry.",
+        "irreversible": false
+      },
+      "result": {
+        "verdict": "BLOCKED",
+        "gate_action": "require_approval",
+        "gate_rule": "policy-default",
+        "reason": "policy default: every fix requires human approval",
+        "applied": false,
+        "proposed_change": "Add idempotency_key to payments.charge_card calls to prevent duplicate charges on retry.",
+        "note": "the gate decides; nothing is applied by this tool, ever"
+      }
+    },
+    {
+      "step": 17,
+      "tool": "propose_fix",
+      "args": {
+        "fault_ref": "pii-exposure-shipping",
+        "target_file": "tool_trace.jsonl",
+        "change": "Redact ship_to personal data and billing card details from tool trace logs.",
+        "irreversible": false
+      },
+      "result": {
+        "verdict": "BLOCKED",
+        "gate_action": "require_approval",
+        "gate_rule": "policy-default",
+        "reason": "policy default: every fix requires human approval",
+        "applied": false,
+        "proposed_change": "Redact ship_to personal data and billing card details from tool trace logs.",
+        "note": "the gate decides; nothing is applied by this tool, ever"
+      }
+    },
+    {
+      "step": 18,
+      "tool": "render_report",
+      "args": {
+        "findings": [
+          {
+            "file": "ga4_events.json",
+            "line": 70,
+            "severity": "high",
+            "fault_type": "currency_mismatch",
+            "issue": "Purchase transaction FF-2026-88412 reports currency USD while funnel is EUR.",
+            "fix": "Change purchase currency to EUR to match funnel."
+          },
+          {
+            "file": "ga4_events.json",
+            "line": 86,
+            "severity": "high",
+            "fault_type": "duplicate_event",
+            "issue": "Transaction_id FF-2026-88412 appears twice with duplicate purchase events.",
+            "fix": "Deduplicate purchase events keeping one per transaction_id."
+          },
+          {
+            "file": "gtm_container.json",
+            "line": 50,
+            "severity": "high",
+            "fault_type": "obfuscated_secret",
+            "issue": "Custom HTML tag embeds base64-encoded API token FF_TOKEN_f4k3_d0_n0pt_us3_998877 that decodes to live bearer token.",
+            "fix": "Remove token from client-side tag and fetch from server-side secret store."
+          },
+          {
+            "file": "tool_trace.jsonl",
+            "line": 2,
+            "severity": "high",
+            "fault_type": "missing_idempotency",
+            "issue": "payments.charge_card call t-102 retried without idempotency_key and settled two charges ch_ff_881 and ch_ff_882.",
+            "fix": "Generate and send idempotency_key for charge_card to prevent double charge."
+          },
+          {
+            "file": "tool_trace.jsonl",
+            "line": 3,
+            "severity": "high",
+            "fault_type": "pii_exposure",
+            "issue": "shipping.create_label input logs ship_to name, street, city and card ending 4417.",
+            "fix": "Redact PII from tool trace inputs and store only order_ref."
+          }
+        ]
+      },
+      "result": {
+        "submitted": 5,
+        "note": "findings submitted \u2014 the harness now grades them and renders the report. The audit is complete."
+      }
+    }
+  ],
+  "gate_log": [
+    {
+      "fault_ref": "currency-mismatch-purchase",
+      "target_file": "ga4_events.json",
+      "change": "Change purchase event currency from USD to EUR to match funnel.",
+      "irreversible": false,
+      "verdict": "BLOCKED",
+      "gate_action": "require_approval",
+      "gate_rule": "policy-default",
+      "reason": "policy default: every fix requires human approval",
+      "applied": false,
+      "proposed_change": "Change purchase event currency from USD to EUR to match funnel.",
+      "note": "the gate decides; nothing is applied by this tool, ever"
+    },
+    {
+      "fault_ref": "duplicate-purchase",
+      "target_file": "ga4_events.json",
+      "change": "Deduplicate purchase events, keep only one record per transaction_id FF-2026-88412.",
+      "irreversible": false,
+      "verdict": "BLOCKED",
+      "gate_action": "require_approval",
+      "gate_rule": "policy-default",
+      "reason": "policy default: every fix requires human approval",
+      "applied": false,
+      "proposed_change": "Deduplicate purchase events, keep only one record per transaction_id FF-2026-88412.",
+      "note": "the gate decides; nothing is applied by this tool, ever"
+    },
+    {
+      "fault_ref": "obfuscated-secret-gtm",
+      "target_file": "gtm_container.json",
+      "change": "Remove encoded API token from custom HTML tag and load token from server-side secret store.",
+      "irreversible": false,
+      "verdict": "BLOCKED",
+      "gate_action": "require_approval",
+      "gate_rule": "policy-default",
+      "reason": "policy default: every fix requires human approval",
+      "applied": false,
+      "proposed_change": "Remove encoded API token from custom HTML tag and load token from server-side secret store.",
+      "note": "the gate decides; nothing is applied by this tool, ever"
+    },
+    {
+      "fault_ref": "missing-idempotency-charge",
+      "target_file": "tool_trace.jsonl",
+      "change": "Add idempotency_key to payments.charge_card calls to prevent duplicate charges on retry.",
+      "irreversible": false,
+      "verdict": "BLOCKED",
+      "gate_action": "require_approval",
+      "gate_rule": "policy-default",
+      "reason": "policy default: every fix requires human approval",
+      "applied": false,
+      "proposed_change": "Add idempotency_key to payments.charge_card calls to prevent duplicate charges on retry.",
+      "note": "the gate decides; nothing is applied by this tool, ever"
+    },
+    {
+      "fault_ref": "pii-exposure-shipping",
+      "target_file": "tool_trace.jsonl",
+      "change": "Redact ship_to personal data and billing card details from tool trace logs.",
+      "irreversible": false,
+      "verdict": "BLOCKED",
+      "gate_action": "require_approval",
+      "gate_rule": "policy-default",
+      "reason": "policy default: every fix requires human approval",
+      "applied": false,
+      "proposed_change": "Redact ship_to personal data and billing card details from tool trace logs.",
+      "note": "the gate decides; nothing is applied by this tool, ever"
+    }
+  ],
+  "model_findings": [
+    {
+      "file": "ga4_events.json",
+      "line": 70,
+      "severity": "high",
+      "fault_type": "currency_mismatch",
+      "fault_title": "Currency mismatch",
+      "issue": "Currency mismatch: Purchase transaction FF-2026-88412 reports currency USD while funnel is EUR.",
+      "fix": "Change purchase currency to EUR to match funnel."
+    },
+    {
+      "file": "ga4_events.json",
+      "line": 86,
+      "severity": "high",
+      "fault_type": "duplicate_event",
+      "fault_title": "Duplicate event",
+      "issue": "Duplicate event: Transaction_id FF-2026-88412 appears twice with duplicate purchase events.",
+      "fix": "Deduplicate purchase events keeping one per transaction_id."
+    },
+    {
+      "file": "gtm_container.json",
+      "line": 50,
+      "severity": "high",
+      "fault_type": "obfuscated_secret",
+      "fault_title": "Obfuscated secret",
+      "issue": "Obfuscated secret: Custom HTML tag embeds base64-encoded API token FF_TOKEN_f4k3_d0_n0pt_us3_998877 that decodes to live bearer token.",
+      "fix": "Remove token from client-side tag and fetch from server-side secret store."
+    },
+    {
+      "file": "tool_trace.jsonl",
+      "line": 2,
+      "severity": "high",
+      "fault_type": "missing_idempotency",
+      "fault_title": "Missing idempotency",
+      "issue": "Missing idempotency: payments.charge_card call t-102 retried without idempotency_key and settled two charges ch_ff_881 and ch_ff_882.",
+      "fix": "Generate and send idempotency_key for charge_card to prevent double charge."
+    },
+    {
+      "file": "tool_trace.jsonl",
+      "line": 3,
+      "severity": "high",
+      "fault_type": "pii_exposure",
+      "fault_title": "PII exposure",
+      "issue": "PII exposure: shipping.create_label input logs ship_to name, street, city and card ending 4417.",
+      "fix": "Redact PII from tool trace inputs and store only order_ref."
+    }
+  ],
+  "mapping": {
+    "0": "FAULT-V2-1",
+    "1": "FAULT-V2-2",
+    "2": "FAULT-V2-3",
+    "3": "FAULT-V2-4",
+    "4": "FAULT-V2-5"
+  },
+  "grader_error": null,
+  "grader_uncovered_ids": [],
+  "grader_matched_phrases": null,
+  "score": {
+    "caught": [
+      "FAULT-V2-1",
+      "FAULT-V2-2",
+      "FAULT-V2-3",
+      "FAULT-V2-4",
+      "FAULT-V2-5"
+    ],
+    "missed": [],
+    "model_audit": "5/5",
+    "spec_target": "5/5",
+    "gate_blocked": 5,
+    "gate_approved": 0
+  }
+}
