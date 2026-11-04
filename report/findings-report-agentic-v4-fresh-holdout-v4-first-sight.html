@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Reliability Cockpit — Audit Report (demo-dataset-v4-fresh-holdout)</title>
+<style>
+  body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+         margin: 0; background: #f6f7f9; color: #1a1a2e; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 28px 18px 40px; }
+  header { background: #16213e; color: #fff; border-radius: 12px; padding: 22px 24px; }
+  header h1 { margin: 0 0 4px; font-size: 24px; }
+  header .sub { color: #b8c4de; font-size: 14px; }
+  .score { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 14px; }
+  .score div { background: #0f3460; border-radius: 8px; padding: 8px 14px; font-size: 14px; }
+  .score b { font-size: 18px; }
+  h2 { margin: 26px 0 10px; font-size: 17px; }
+  .card { border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: #fff; }
+  .card-top { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 12.5px; }
+  .sev { color: #fff; font-weight: 700; padding: 2px 9px; border-radius: 20px; }
+  .tag { font-weight: 700; }
+  .loc { color: #555; font-family: ui-monospace, Menlo, Consolas, monospace; }
+  .card h3 { margin: 10px 0 6px; font-size: 16.5px; }
+  .detail { margin: 4px 0; color: #333; font-size: 14.5px; }
+  .fix { margin: 8px 0 0; font-size: 14.5px; }
+  .impact { margin: 8px 0 0; font-size: 14.5px; background: #fff8e1; border-radius: 6px; padding: 8px 10px; }
+  .impact-total { margin-top: 14px; background: #7b1f1f; border-radius: 8px; padding: 10px 14px; font-size: 14.5px; }
+  .calib { margin-top: 22px; font-size: 13px; color: #555; border: 1px dashed #bbb; border-radius: 8px; padding: 10px 14px; background: #fff; }
+  .gate { display: flex; justify-content: space-between; align-items: center; gap: 10px;
+          flex-wrap: wrap; margin-top: 12px; padding-top: 10px; border-top: 1px dashed #bbb; }
+  .gate-state { font-weight: 700; font-size: 13.5px; color: #7a3b00; }
+  .btn { display: inline-block; padding: 5px 14px; border-radius: 6px; font-size: 13px;
+         font-weight: 700; margin-left: 6px; opacity: .55; }
+  .approve { background: #2e7d32; color: #fff; }
+  .reject { background: #eceff1; color: #37474f; border: 1px solid #90a4ae; }
+  footer { margin-top: 28px; font-size: 13px; color: #555; border-top: 1px solid #ddd; padding-top: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Agent Reliability Cockpit — Audit Report</h1>
+    <div class="sub">Dataset: demo-dataset-v4-fresh-holdout (synthetic) · Audited by muse-spark-1.1 via the Meta Model API · Run 2026-10-31T13:59:07+00:00</div>
+    <div class="score">
+      <div>Score <b>5/5</b></div>
+      <div>Pass bar <b>Model catches &gt;=4 of 5 faults on data it has never seen, in the Oct 31 credibility runs. Report strict + typed scores side by side, same as v2.</b></div>
+      <div>Faults caught <b>5/5</b></div>
+      <div>Tokens <b>48889 in · 4092 out · 1534 reasoning</b></div>
+      <div>Run cost <b>$0.0785</b></div>
+    </div>
+    <div class="impact-total"><strong>Total quantified impact:</strong>  — every figure computed from the data itself, not estimated by the model.</div>
+  </header>
+
+  <h2>Findings — every fix stops at my approval gate. Nothing below has been applied.</h2>
+  
+    <article class="card" style="border-left:8px solid #c62828;background:#fdecea">
+      <div class="card-top">
+        <span class="sev" style="background:#c62828">HIGH</span>
+        <span class="tag">FAULT-V4-1</span>
+        <span class="loc">ga4_events.json</span>
+      </div>
+      <h3>Wrong currency on revenue — Currency mismatch: purchase event currency GBP does not match funnel currency USD and storefront constant USD</h3>
+      <p class="detail">The purchase events report currency &#x27;GBP&#x27; with value 144.00, but the whole funnel ran in USD — every earlier event uses currency USD and the items were priced at USD 48.00 x 3. Revenue for this order is recorded in the wrong currency.</p>
+      
+      <p class="fix"><strong>Proposed fix:</strong> Normalize purchase currency to USD matching funnel</p>
+      <div class="gate">
+        <span class="gate-state">⛔ Approval gate: REQUIRES APPROVAL — nothing applied yet</span>
+        <span class="gate-btns"><span class="btn approve">APPROVE</span><span class="btn reject">REJECT</span></span>
+      </div>
+    </article>
+
+    <article class="card" style="border-left:8px solid #c62828;background:#fdecea">
+      <div class="card-top">
+        <span class="sev" style="background:#c62828">HIGH</span>
+        <span class="tag">FAULT-V4-2 · same problem, second half</span>
+        <span class="loc">ga4_events.json</span>
+      </div>
+      <h3>Same purchase counted twice — Currency mismatch: purchase event currency GBP does not match funnel currency USD on second occurrence</h3>
+      <p class="detail">The identical purchase event — same transaction_id HP-2026-7319, same items, same value — is recorded twice, 4 seconds apart. A double-fired tag records one order as two purchases and doubles reported revenue.</p>
+      
+      <p class="fix"><strong>Proposed fix:</strong> Normalize purchase currency to USD</p>
+      <div class="gate">
+        <span class="gate-state">⛔ Approval gate: REQUIRES APPROVAL — nothing applied yet</span>
+        <span class="gate-btns"><span class="btn approve">APPROVE</span><span class="btn reject">REJECT</span></span>
+      </div>
+    </article>
+
+    <article class="card" style="border-left:8px solid #c62828;background:#fdecea">
+      <div class="card-top">
+        <span class="sev" style="background:#c62828">HIGH</span>
+        <span class="tag">FAULT-V4-2</span>
+        <span class="loc">ga4_events.json</span>
+      </div>
+      <h3>Same purchase counted twice — Duplicate event: transaction_id HP-2026-7319 recorded twice counting same purchase two times</h3>
+      <p class="detail">The identical purchase event — same transaction_id HP-2026-7319, same items, same value — is recorded twice, 4 seconds apart. A double-fired tag records one order as two purchases and doubles reported revenue.</p>
+      
+      <p class="fix"><strong>Proposed fix:</strong> Deduplicate purchase keeping earliest event for HP-2026-7319</p>
+      <div class="gate">
+        <span class="gate-state">⛔ Approval gate: REQUIRES APPROVAL — nothing applied yet</span>
+        <span class="gate-btns"><span class="btn approve">APPROVE</span><span class="btn reject">REJECT</span></span>
+      </div>
+    </article>
+
+    <article class="card" style="border-left:8px solid #b00020;background:#fdecea">
+      <div class="card-top">
+        <span class="sev" style="background:#b00020">CRITICAL</span>
+        <span class="tag">FAULT-V4-3</span>
+        <span class="loc">gtm_container.json</span>
+      </div>
+      <h3>Secret hidden in code — Obfuscated secret: bearer token hp_rates_key hidden via atob base64 in custom HTML tag Shipping Rates</h3>
+      <p class="detail">A live shipping-rates API key is hidden inside the Shipping Rates custom HTML tag: a base64 blob decoded with atob() at runtime holds {hp_rates_key: HP_TOKEN_f4k3...}. Encoding is not protection — anyone who can view the container can decode it, and the key ships to every visitor&#x27;s browser.</p>
+      
+      <p class="fix"><strong>Proposed fix:</strong> Remove encoded secret from tag and fetch via server-side secrets</p>
+      <div class="gate">
+        <span class="gate-state">⛔ Approval gate: REQUIRES APPROVAL — nothing applied yet</span>
+        <span class="gate-btns"><span class="btn approve">APPROVE</span><span class="btn reject">REJECT</span></span>
+      </div>
+    </article>
+
+    <article class="card" style="border-left:8px solid #b00020;background:#fdecea">
+      <div class="card-top">
+        <span class="sev" style="background:#b00020">CRITICAL</span>
+        <span class="tag">FAULT-V4-4</span>
+        <span class="loc">tool_trace.jsonl</span>
+      </div>
+      <h3>Customer charged twice — Missing idempotency: payments.charge_card call t-202 has idempotency_key null and retried after timeout</h3>
+      <p class="detail">payments.charge_card ran with idempotency_key null. When the first attempt timed out at the gateway, the client retried and the customer was charged twice: two settled charges (ch_hp_441, ch_hp_442) of 14400 cents each for one order — a real double charge.</p>
+      
+      <p class="fix"><strong>Proposed fix:</strong> Require idempotency_key for charge_card and block retry without key</p>
+      <div class="gate">
+        <span class="gate-state">⛔ Approval gate: REQUIRES APPROVAL — nothing applied yet</span>
+        <span class="gate-btns"><span class="btn approve">APPROVE</span><span class="btn reject">REJECT</span></span>
+      </div>
+    </article>
+
+    <article class="card" style="border-left:8px solid #b00020;background:#fdecea">
+      <div class="card-top">
+        <span class="sev" style="background:#b00020">CRITICAL</span>
+        <span class="tag">FAULT-V4-4 · same problem, second half</span>
+        <span class="loc">tool_trace.jsonl</span>
+      </div>
+      <h3>Customer charged twice — Unsafe replay: payments.charge_card call t-202 settled 2 charges ch_hp_441 and ch_hp_442 on one call</h3>
+      <p class="detail">payments.charge_card ran with idempotency_key null. When the first attempt timed out at the gateway, the client retried and the customer was charged twice: two settled charges (ch_hp_441, ch_hp_442) of 14400 cents each for one order — a real double charge.</p>
+      
+      <p class="fix"><strong>Proposed fix:</strong> Add idempotency check and refund duplicate charge ch_hp_442</p>
+      <div class="gate">
+        <span class="gate-state">⛔ Approval gate: REQUIRES APPROVAL — nothing applied yet</span>
+        <span class="gate-btns"><span class="btn approve">APPROVE</span><span class="btn reject">REJECT</span></span>
+      </div>
+    </article>
+
+    <article class="card" style="border-left:8px solid #c62828;background:#fdecea">
+      <div class="card-top">
+        <span class="sev" style="background:#c62828">HIGH</span>
+        <span class="tag">FAULT-V4-5</span>
+        <span class="loc">tool_trace.jsonl</span>
+      </div>
+      <h3>Private data in tool input — PII exposure: customer_email and customer_phone exposed in notifications.send_receipt input t-203</h3>
+      <p class="detail">A customer&#x27;s email address and phone number sit in the INPUT of the notifications.send_receipt call, so they are stored in the trace log in plain text. Inputs get logged just like outputs — this trace now holds personal contact data.</p>
+      
+      <p class="fix"><strong>Proposed fix:</strong> Redact email and phone from trace and store hashed references only</p>
+      <div class="gate">
+        <span class="gate-state">⛔ Approval gate: REQUIRES APPROVAL — nothing applied yet</span>
+        <span class="gate-btns"><span class="btn approve">APPROVE</span><span class="btn reject">REJECT</span></span>
+      </div>
+    </article>
+
+  
+
+  <footer>
+    Approval gate: every proposed fix above returned <b>require_approval</b> from my gate —
+    the Cockpit proposes, I decide, only then does anything change.
+    Cumulative hackathon spend: <b>$0.4424 of the $150 credit</b>.
+    Report generated locally from the run record — rendering cost $0.
+  </footer>
+</div>
+</body>
+</html>
