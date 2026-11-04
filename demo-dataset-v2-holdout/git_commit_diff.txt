@@ -1,0 +1,33 @@
+commit ff29c41d8a2e — "harden the fern sync worker retries" (SYNTHETIC, invented for the demo)
+
+diff --git a/workers/fern_sync.py b/workers/fern_sync.py
+--- a/workers/fern_sync.py
++++ b/workers/fern_sync.py
+@@ -8,14 +8,20 @@ import os
+ import time
+ 
+ import requests
+ 
+-API_TOKEN = os.environ["FF_API_TOKEN"]
++API_TOKEN = os.environ["FF_API_TOKEN"]  # provided by the deploy environment
+ BASE_URL = "https://sync.example.invalid/v2"
+-RETRY_LIMIT = 2
++RETRY_LIMIT = 4
++BACKOFF_SECONDS = 1.5
+ 
+ 
+ def push_batch(records):
+     headers = {"Authorization": f"Bearer {API_TOKEN}"}
+-    for attempt in range(RETRY_LIMIT):
++    for attempt in range(RETRY_LIMIT + 1):
+         try:
+             resp = requests.post(BASE_URL + "/orders", json=records,
+                                  headers=headers, timeout=10)
+             resp.raise_for_status()
+             return resp.json()
+         except requests.RequestException:
+-            time.sleep(1)
++            if attempt == RETRY_LIMIT:
++                raise
++            time.sleep(BACKOFF_SECONDS * (attempt + 1))
+     return None
