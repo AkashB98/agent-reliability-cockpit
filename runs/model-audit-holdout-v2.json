@@ -1,0 +1,46 @@
+{
+  "run": "holdout-v2",
+  "timestamp": "2026-10-26T21:47:08+00:00",
+  "model": "muse-spark-1.1",
+  "status": "no_completed_run \u2014 API connection stalled on both attempts",
+  "dataset": "demo-dataset-v2-holdout (built 2026-10-26, after v1 was tuned; never shown to the model before this run)",
+  "recipe": {
+    "max_completion_tokens_first": 12000,
+    "reasoning_effort": "low",
+    "developer_role_format_rules": true,
+    "response_format": "json_schema object root {findings:[...]}",
+    "streamed": true
+  },
+  "attempts": [
+    {
+      "n": 1,
+      "via": "meta_audit_holdout.py (same streamed call code as the successful v1 run 2)",
+      "cap": 12000,
+      "strict": true,
+      "egress_approval": "timed_out (no decision inside the window)",
+      "result": "transport timeout at 240s \u2014 zero bytes returned, no usage reported",
+      "usage": null,
+      "estimated_cost_usd": 0.0
+    },
+    {
+      "n": 2,
+      "via": "holdout_probe.py (identical request body, byte-level timing log)",
+      "cap": 12000,
+      "strict": true,
+      "egress_approval": "approved instantly",
+      "result": "connection open blocked the full 180s timeout \u2014 the API never returned response headers, zero bytes, no usage reported",
+      "usage": null,
+      "estimated_cost_usd": 0.0
+    }
+  ],
+  "usage": null,
+  "reasoning_tokens": null,
+  "observed_cost_usd": 0.0,
+  "cost_caveat": "Both attempts reported no usage and returned zero bytes, so observed cost is $0.00. Unobservable worst case if the requests were somehow served after the connection died: prompt (~1,900 tokens) + the full 12,000 completion cap each \u2248 $0.053 per attempt. Evidence points the other way \u2014 evening runs today (including the successful 4/4 at 20:59 UTC) used the identical path, and both holdout attempts died before response headers.",
+  "model_findings": [],
+  "score": {
+    "model_audit": "0/5",
+    "meaning": "no completed run \u2014 an infrastructure stall, not a model miss; the holdout question stays open until one clean call lands"
+  },
+  "retry_policy_note": "Established policy covers exactly two failure shapes (400 -> drop strict; length+empty -> double cap). Neither occurred. Both budgeted call slots were consumed by connection stalls, so no third call was made."
+}
